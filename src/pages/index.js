@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Typography } from '@material-ui/core';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
+import { handleCheckAuthentication } from 'tools/functions';
 
-export default function PersistentDrawerLeft() {
+const Admin = (props) => {
+    const {
+        isAuth: { isAuthenticated },
+    } = props;
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            console.log('isaut', isAuthenticated);
+        }
+    }, [isAuthenticated, router]);
+
     return (
         <div>
             <Typography paragraph>
@@ -34,4 +48,18 @@ export default function PersistentDrawerLeft() {
             </Typography>
         </div>
     );
+};
+
+Admin.propTypes = {
+    isAuth: PropTypes.object.isRequired,
+};
+
+export default Admin;
+
+export async function getServerSideProps(context) {
+    return {
+        props: {
+            isAuth: handleCheckAuthentication(context),
+        },
+    };
 }

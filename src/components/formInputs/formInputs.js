@@ -1,15 +1,18 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import {
+    TextField,
+    FormControlLabel,
+    Checkbox,
+    Radio,
+    RadioGroup,
+    FormHelperText,
+    InputLabel,
+    FormControl,
+    Select,
+    Switch,
+} from '@material-ui/core';
 
 export const renderInput = (field) => {
     const {
@@ -192,13 +195,32 @@ export const renderCheckBox = (field) => {
     );
 };
 
+export const renderSwitch = (field) => {
+    const {
+        meta: { touched, error },
+    } = field;
+    return (
+        <>
+            <FormControlLabel
+                control={
+                    <Switch checked={field.checked} {...field.input} color="primary" />
+                }
+                label={field.text}
+            />
+            <span className="form_error">{touched ? error : ''}</span>
+        </>
+    );
+};
+
 // this file input in case of need
 // for now, using regular <input type="file"
 // and handling validation and insert to form value onChange and onSubmit
 // from https://gist.github.com/barraponto/c370c17b2499c36a625fe1326c57ab21
 
-const handleChange = (handler) => ({ target: { files } }) =>
-    handler(files.length ? { file: files[0], name: files[0].name } : {});
+const handleChange =
+    (handler) =>
+    ({ target: { files } }) =>
+        handler(files.length ? { file: files[0], name: files[0].name } : {});
 
 export const renderFileInput = ({
     input: { onChange, onBlur, value: omitValue, ...inputProps },

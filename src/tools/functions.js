@@ -458,7 +458,7 @@ export function handleIsNotAuthenticated(router) {
     });
 }
 
-export function capitalizeCity(string) {
+export function capitalize(string) {
     const splitStr = string.toLowerCase().split('-');
     for (let i = 0; i < splitStr.length; i++) {
         if (splitStr[i] !== 'da' || splitStr[i] !== 'de') {

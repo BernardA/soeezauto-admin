@@ -21,6 +21,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Link from 'components/std/link';
 import { actionAddToUrlHistory } from 'store/actions';
+import SessionHandler from './sessionHandler';
 
 const ClientLog = dynamic(() => import('./clientLog'), {
     ssr: false,
@@ -109,7 +110,6 @@ const Layout = (props) => {
             router.events.off('routeChangeComplete', handleRouteChangeComplete);
         };
     }, [router.events]);
-    console.log('router', router);
     return (
         <div className={classes.root}>
             <AppBar
@@ -129,7 +129,7 @@ const Layout = (props) => {
                         <Menu />
                     </IconButton>
                     <Typography variant="h6" noWrap>
-                        {router.asPath.replace(/\//g, ' ')}
+                        {`Admin ${router.asPath.replace(/\//g, ' ')}`}
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -177,6 +177,7 @@ const Layout = (props) => {
                 <div className={classes.drawerHeader} />
                 <>{children}</>
             </main>
+            <SessionHandler router={router} />
             <ClientLog />
         </div>
     );

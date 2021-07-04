@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { Visibility } from '@material-ui/icons';
 import { InputAdornment, TextField } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { actionToggleVisiblePassword } from '../../store/actions';
+import { actionToggleVisiblePassword } from 'store/actions';
 
 class RenderPassword extends React.Component {
     componentDidUpdate(prevProps) {

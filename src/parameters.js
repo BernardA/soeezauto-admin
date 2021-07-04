@@ -1,12 +1,16 @@
 export const TIMEZONE = 'Africa/Casablanca';
-export const LOCALE = 'fr-MA';
+export const LOCALE = 'en-US';
 export const CURRENCY = 'MAD';
-export const LANG = 'fr';
+export const LANG = 'en';
 export const COUNTRY = 'Maroc';
 
 export const COOKIE_MAX_AGE = 2592000; // 30 days
 export const COOKIE_MAX_AGE_USER_REMINDERS = 300;
 export const COOKIE_SAME_SITE = 'strict';
+
+export const TOKEN_TTL = 1800; // seconds
+export const MAX_IDLE_TIME = 1500;
+export const IDLE_TIME_LOGOUT = 60;
 
 export const REVALIDATE_INTERVAL = 3600; // how ofter to refresh data from API
 
