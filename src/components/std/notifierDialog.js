@@ -32,10 +32,11 @@ class NotifierDialog extends React.Component {
 
     errors = () => {
         const errors = this.props.notification.errors;
-        if (errors && errors.constructor === Object && Object.keys(errors).length > 0) {
+        console.log('errors', errors);
+        if (errors && errors.length > 0) {
             const output = errors.map((error) => {
                 const key = Object.keys(error)[0];
-                return <li key={`${key} - ${error[key]}`}>{error[key]}</li>;
+                return <li key={`${key} - ${error[key]}`}>{`${key} - ${error[key]}`}</li>;
             });
             return <ul>{output}</ul>;
         }
@@ -130,7 +131,6 @@ class NotifierDialog extends React.Component {
     };
 
     render() {
-        console.log('props dialog', this.props);
         const { classes } = this.props;
         if (this.props.notification.status !== '') {
             return (

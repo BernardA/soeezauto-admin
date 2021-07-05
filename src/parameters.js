@@ -56,6 +56,39 @@ export const TRIMS_AIR_COND_AUTO = [
     '/api/trims/251',
 ];
 
+export const BODY_TYPES = [
+    'berline',
+    'break',
+    'cabriolet',
+    'coupe',
+    'monospace',
+    'pick-up',
+    'spider',
+    'SUV',
+];
+
+export const GEARBOXES = [
+    'A1',
+    'A2',
+    'A4',
+    'A5',
+    'A6',
+    'A7',
+    'A8',
+    'A9',
+    'A10',
+    'CVT',
+    'M5',
+    'M6',
+    'M7',
+];
+
+export const PLACES = [2, 3, 4, 5, 6, 7];
+
+export const DOORS = [2, 3, 4, 5];
+
+export const TRACTIONS = ['4x4', 'propulsion', 'traction'];
+
 export const TRIMS_DISPLAY_MULTIMEDIA = ['/api/trims/273', '/api/trims/463'];
 
 export const TRIMS_LEATHER_SEATS = ['/api/trims/115', '/api/trims/284', '/api/trims/541'];

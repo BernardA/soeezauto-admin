@@ -1,14 +1,13 @@
 /* eslint-disable react/display-name */
 import React, { useEffect, useState } from 'react';
 import MUIDataTable from 'mui-datatables';
-import { Button } from '@material-ui/core';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { Button, AppBar, Toolbar } from '@material-ui/core';
+import { makeStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { Check, Close } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 import { apiQl } from 'lib/functions';
 import Breadcrumb from 'components/std/breadcrumb';
 import Link from 'components/std/link';
-import { urlWriter } from 'tools/functions';
 
 const getMuiTheme = () =>
     createMuiTheme({
@@ -53,24 +52,56 @@ const getMuiTheme = () =>
         },
     });
 
-const Brands = ({ brands }) => {
-    const [allBrands, setAllBrands] = useState(null);
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+    },
+    title: {
+        flexGrow: 1,
+    },
+    barRoot: {
+        backgroundColor: 'initial',
+        color: 'initial',
+        '& .MuiToolbar-root': {
+            justifyContent: 'end',
+        },
+    },
+    cardContent: {
+        '& div': {
+            marginBottom: 15,
+        },
+        '& .MuiFormControl-root': {
+            width: '100%',
+        },
+    },
+}));
+
+const Models = ({ models }) => {
+    const classes = useStyles();
+    const [allModels, setAllModels] = useState(null);
     useEffect(() => {
-        if (brands) {
+        if (models) {
             const data = [];
-            brands.map((brand) =>
+            models.map((model) =>
                 data.push({
-                    id: brand.id,
-                    brand: brand.brand,
-                    isActive: brand.isActive,
-                    edit: brand.brand,
-                    view: brand.brand,
+                    id: model.id,
+                    model: model.model,
+                    brand: model.brand.brand,
+                    isActive: model.isActive,
+                    edit: model._id,
+                    view: model._id,
                 }),
             );
 
             const columns = [
                 {
                     name: 'id',
+                },
+                {
+                    name: 'model',
                 },
                 {
                     name: 'brand',
@@ -89,7 +120,7 @@ const Brands = ({ brands }) => {
                     options: {
                         customBodyRender: (value) => {
                             return (
-                                <Link href={`/brands/edit/${urlWriter(value)}`}>
+                                <Link href={`/models/edit/${value}`}>
                                     <Button variant="outlined" size="small">
                                         Edit
                                     </Button>
@@ -104,7 +135,7 @@ const Brands = ({ brands }) => {
                     options: {
                         customBodyRender: (value) => {
                             return (
-                                <Link href={`/brands/view/${urlWriter(value)}`}>
+                                <Link href={`/models/view/${value}`}>
                                     <Button variant="outlined" size="small">
                                         View
                                     </Button>
@@ -114,12 +145,12 @@ const Brands = ({ brands }) => {
                     },
                 },
             ];
-            setAllBrands({
+            setAllModels({
                 data,
                 columns,
             });
         }
-    }, [brands]);
+    }, [models]);
 
     const options = {
         sort: true,
@@ -135,23 +166,30 @@ const Brands = ({ brands }) => {
         selectableRows: 'none',
         selectableRowsHeader: false,
     };
+
     return (
         <>
             <Breadcrumb
                 links={[
                     {
                         href: null,
-                        text: 'brands',
+                        text: 'models',
                     },
                 ]}
             />
-            <div>Brands</div>
+            <AppBar position="static" className={classes.barRoot}>
+                <Toolbar variant="dense">
+                    <Link href="/models/create">
+                        <Button color="inherit">Create</Button>
+                    </Link>
+                </Toolbar>
+            </AppBar>
             <div>
-                {allBrands && (
+                {allModels && (
                     <MuiThemeProvider theme={getMuiTheme()}>
                         <MUIDataTable
-                            data={allBrands.data}
-                            columns={allBrands.columns}
+                            data={allModels.data}
+                            columns={allModels.columns}
                             options={options}
                         />
                     </MuiThemeProvider>
@@ -161,37 +199,43 @@ const Brands = ({ brands }) => {
     );
 };
 
-Brands.propTypes = {
-    brands: PropTypes.array.isRequired,
+Models.propTypes = {
+    models: PropTypes.array.isRequired,
 };
 
-export default Brands;
+export default Models;
 
-const queryQl = `query getBrandsModels {
-    brands(
-        isActive: true
-        _order: {brand: "ASC"}
-    ) {
+const queryQl = `query getModels {
+    models {
         id
-        brand
+        _id
+    	model
+    	modelYear
         isActive
-        image
-        models(
-            isActive: true
-            _order: {model: "ASC"}
-        ){
+    	images{
+            filename
+        }
+    	brand {
             id
-            model
-            modelYear
+            brand
+        }
+        segment {
+            id
+            segment
+        }
+        versions{
+            id
+            version
         }
     }
-}`;
+}
+`;
 
 export async function getServerSideProps() {
     const data = await apiQl(queryQl, null, false);
     return {
         props: {
-            brands: data.data.brands,
+            models: data.data.models,
         },
     };
 }

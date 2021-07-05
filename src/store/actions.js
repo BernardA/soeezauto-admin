@@ -62,6 +62,34 @@ export const PUT_BRAND_ERROR = 'PUT_BRAND_ERROR';
 
 export const SET_PUT_BRAND_TO_NULL = 'SET_PUT_BRAND_TO_NULL';
 
+export const PUT_MODEL = 'PUT_MODEL';
+export const PUT_MODEL_INIT = 'PUT_MODEL_INIT';
+export const PUT_MODEL_OK = 'PUT_MODEL_OK';
+export const PUT_MODEL_ERROR = 'PUT_MODEL_ERROR';
+
+export const SET_PUT_MODEL_TO_NULL = 'SET_PUT_MODEL_TO_NULL';
+
+export const POST_MODEL = 'POST_MODEL';
+export const POST_MODEL_INIT = 'POST_MODEL_INIT';
+export const POST_MODEL_OK = 'POST_MODEL_OK';
+export const POST_MODEL_ERROR = 'POST_MODEL_ERROR';
+
+export const SET_POST_MODEL_TO_NULL = 'SET_POST_MODEL_TO_NULL';
+
+export const POST_VERSION = 'POST_VERSION';
+export const POST_VERSION_INIT = 'POST_VERSION_INIT';
+export const POST_VERSION_OK = 'POST_VERSION_OK';
+export const POST_VERSION_ERROR = 'POST_VERSION_ERROR';
+
+export const SET_POST_VERSION_TO_NULL = 'SET_POST_VERSION_TO_NULL';
+
+export const PUT_VERSION = 'PUT_VERSION';
+export const PUT_VERSION_INIT = 'PUT_VERSION_INIT';
+export const PUT_VERSION_OK = 'PUT_VERSION_OK';
+export const PUT_VERSION_ERROR = 'PUT_VERSION_ERROR';
+
+export const SET_PUT_VERSION_TO_NULL = 'SET_PUT_VERSION_TO_NULL';
+
 export function actionPostLogin(values) {
     return {
         type: POST_LOGIN,
@@ -145,7 +173,7 @@ export function actionAddToUrlHistory(url) {
     };
 }
 
-export function actionGetGranc(brandId) {
+export function actionGetBrand(brandId) {
     return {
         type: GET_BRAND,
         brandId,
@@ -162,5 +190,57 @@ export function actionPutBrand(values) {
 export function actionSetPutBrandToNull() {
     return {
         type: SET_PUT_BRAND_TO_NULL,
+    };
+}
+
+export function actionPutModel(values) {
+    return {
+        type: PUT_MODEL,
+        values,
+    };
+}
+
+export function actionSetPutModelToNull() {
+    return {
+        type: SET_PUT_MODEL_TO_NULL,
+    };
+}
+
+export function actionPostModel(values) {
+    return {
+        type: POST_MODEL,
+        values,
+    };
+}
+
+export function actionSetPostModelToNull() {
+    return {
+        type: SET_POST_MODEL_TO_NULL,
+    };
+}
+
+export function actionPostVersion(values) {
+    return {
+        type: POST_VERSION,
+        values,
+    };
+}
+
+export function actionSetPostVersionToNull() {
+    return {
+        type: SET_POST_VERSION_TO_NULL,
+    };
+}
+
+export function actionPutVersion(values) {
+    return {
+        type: PUT_VERSION,
+        values,
+    };
+}
+
+export function actionSetPutVersionToNull() {
+    return {
+        type: SET_PUT_VERSION_TO_NULL,
     };
 }

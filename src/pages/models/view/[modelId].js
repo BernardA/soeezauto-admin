@@ -14,7 +14,6 @@ import { makeStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/
 import { Check, Close } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 import { apiQl } from 'lib/functions';
-import { capitalize, urlWriter } from 'tools/functions';
 import Link from 'components/std/link';
 import Breadcrumb from 'components/std/breadcrumb';
 
@@ -88,19 +87,18 @@ const getMuiTheme = () =>
         },
     });
 
-const BrandView = (props) => {
-    const { brand } = props;
+const ModelView = (props) => {
+    const { model } = props;
     const classes = useStyles();
-    const [modelView, setModelView] = useState(null);
+    const [versionView, setVersionView] = useState(null);
     useEffect(() => {
-        if (brand) {
+        if (model) {
             const data = [];
-            brand.models.map((model) =>
+            model.versions.map((version) =>
                 data.push({
-                    id: model.id,
-                    model: model.model,
-                    modelYear: model.modelYear,
-                    isActive: model.isActive,
+                    id: version.id,
+                    version: version.version,
+                    isActive: version.isActive,
                 }),
             );
 
@@ -109,10 +107,7 @@ const BrandView = (props) => {
                     name: 'id',
                 },
                 {
-                    name: 'model',
-                },
-                {
-                    name: 'modelYear',
+                    name: 'version',
                 },
                 {
                     name: 'isActive',
@@ -123,12 +118,12 @@ const BrandView = (props) => {
                     },
                 },
             ];
-            setModelView({
+            setVersionView({
                 data,
                 columns,
             });
         }
-    }, [brand]);
+    }, [model]);
 
     const options = {
         sort: true,
@@ -150,18 +145,18 @@ const BrandView = (props) => {
             <Breadcrumb
                 links={[
                     {
-                        href: '/brands',
-                        text: 'brands',
+                        href: '/models',
+                        text: 'models',
                     },
                     {
                         href: null,
-                        text: 'brand view',
+                        text: 'model view',
                     },
                 ]}
             />
             <AppBar position="static" className={classes.barRoot}>
                 <Toolbar variant="dense">
-                    <Link href={`/brands/edit/${urlWriter(brand.brand)}`}>
+                    <Link href={`/models/edit/${model._id}`}>
                         <Button color="inherit">Edit</Button>
                     </Link>
                 </Toolbar>
@@ -172,31 +167,31 @@ const BrandView = (props) => {
                         <div>
                             <FormControl>
                                 <Typography component="span">Id</Typography>
-                                <Typography variant="body2">{brand.id}</Typography>
+                                <Typography variant="body2">{model.id}</Typography>
                             </FormControl>
                         </div>
                         <div>
                             <FormControl>
                                 <Typography component="span">Brand</Typography>
-                                <Typography variant="body2">{brand.brand}</Typography>
+                                <Typography variant="body2">{model.model}</Typography>
                             </FormControl>
                         </div>
                         <div>
                             <FormControl>
                                 <Typography component="span">Active</Typography>
                                 <Typography variant="body2">
-                                    {brand.isActive ? <Check /> : <Close />}
+                                    {model.isActive ? <Check /> : <Close />}
                                 </Typography>
                             </FormControl>
                         </div>
                         <div>
                             <FormControl>
-                                <Typography component="span">Models</Typography>
-                                {modelView && (
+                                <Typography component="span">Versions</Typography>
+                                {versionView && (
                                     <MuiThemeProvider theme={getMuiTheme()}>
                                         <MUIDataTable
-                                            data={modelView.data}
-                                            columns={modelView.columns}
+                                            data={versionView.data}
+                                            columns={versionView.columns}
                                             options={options}
                                         />
                                     </MuiThemeProvider>
@@ -210,48 +205,47 @@ const BrandView = (props) => {
     );
 };
 
-BrandView.propTypes = {
-    brand: PropTypes.object.isRequired,
+ModelView.propTypes = {
+    model: PropTypes.object.isRequired,
 };
 
-export default BrandView;
+export default ModelView;
 
-const queryQl = `query getBrand(
-    $brand: [String!]
+const queryQl = `query getModel(
+  	$id: ID!
 ) {
-    brands(
-         brand_list: $brand
-    ) {
+    model(id: $id){
         id
-        brand
-        isActive
-        image
-        models(
-            _order: {model: "ASC"}
-        ){
+        _id
+    	model
+    	modelYear
+    	images {
+            filename
+        }
+    	brand {
             id
-            model
-            modelYear
+            brand
+        }
+        segment {
+            id
+            segment
+        }
+        versions{
+            id
+            version
             isActive
         }
     }
 }`;
 
 export async function getServerSideProps(context) {
-    const { brand: brandParam } = context.params;
-    let brandInput = brandParam.replace(/-/g, ' ');
-    if (brandParam === 'bmw') {
-        brandInput = brandParam.toUpperCase();
-    } else {
-        brandInput = capitalize(brandParam);
-    }
     const variables = {
-        brand: [brandInput],
+        id: `/api/models/${context.params.modelId}`,
     };
     const data = await apiQl(queryQl, variables, false);
     return {
         props: {
-            brand: data.data.brands[0],
+            model: data.data.model,
         },
     };
 }

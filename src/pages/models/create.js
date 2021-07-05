@@ -3,19 +3,19 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { useRouter } from 'next/router';
-import { Card, CardContent, AppBar, Toolbar, Button } from '@material-ui/core';
+import { Card, CardContent, AppBar, Toolbar, MenuItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { maxLength, minLength } from 'tools/validator';
+import { maxLength, minLength, required } from 'tools/validator';
 import Loading from 'components/std/loading';
 import NotifierDialog from 'components/std/notifierDialog';
 import { renderInput, renderSwitch } from 'components/formInputs/formInputs';
 import FormSubmit from 'components/formInputs/formSubmit';
-import { actionPutBrand, actionSetPutBrandToNull } from 'store/actions';
+import { actionPostModel, actionSetPostModelToNull } from 'store/actions';
 import Breadcrumb from 'components/std/breadcrumb';
-import Link from 'components/std/link';
-import { capitalize } from 'tools/functions';
-import { apiQl } from 'lib/functions';
+import getBrands from 'lib/getBrands';
+import getSegments from 'lib/getSegments';
+import RenderSelect from 'components/formInputs/formInputRenderSelect';
 
 const maxLength50 = maxLength(50);
 const minLength5 = minLength(5);
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: 'initial',
         color: 'initial',
         '& .MuiToolbar-root': {
-            justifyContent: 'end',
+            justifyContent: 'space-between',
         },
     },
     cardContent: {
@@ -47,11 +47,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const BrandEdit = (props) => {
+const ModelCreate = (props) => {
     const {
-        brand,
-        dataPutBrand,
-        errorPutBrand,
+        brands,
+        segments,
+        dataPostModel,
+        errorPostModel,
         isLoading,
         handleSubmit,
         submitting,
@@ -63,7 +64,8 @@ const BrandEdit = (props) => {
     } = props;
     const classes = useStyles();
     const router = useRouter();
-    const [isActive, setIsActive] = useState(false);
+    const [isActive, setIsActive] = useState(true);
+    const [createdModel, setCreatedModel] = useState(null);
     const [notification, setNotification] = useState({
         status: '',
         title: '',
@@ -72,46 +74,70 @@ const BrandEdit = (props) => {
     });
 
     useEffect(() => {
-        if (brand) {
-            setIsActive(brand.isActive);
-            change('isActive', brand.isActive);
-        }
-    }, [brand]);
+        // set default input values
+        change('isActive', true);
+        change('modelYear', new Date().getFullYear());
+    }, []);
 
     useEffect(() => {
-        if (dataPutBrand) {
+        if (dataPostModel) {
             setNotification({
                 status: 'ok_and_dismiss',
                 title: 'Success',
-                message: 'Brand edited',
+                message: 'Model created',
                 errors: {},
             });
             reset();
-            props.actionSetPutBrandToNull();
+            props.actionSetPostModelToNull();
+            setCreatedModel(dataPostModel.model);
         }
-        if (errorPutBrand) {
+        if (errorPostModel) {
             setNotification({
                 status: 'ok_and_dismiss',
                 title: 'Error',
                 message: 'See below',
-                errors: errorPutBrand,
+                errors: errorPostModel,
             });
-            props.actionSetPutBrandToNull();
+            props.actionSetPostModelToNull();
         }
-    }, [dataPutBrand, errorPutBrand, reset]);
+    }, [dataPostModel, errorPostModel, reset]);
 
     const handleIsActiveChange = (event) => {
         setIsActive(event.target.checked);
     };
 
-    const handlePutBrandFormSubmit = () => {
+    const handlePostModelFormSubmit = () => {
         const values = {
-            ...props.brandPutForm.values,
-            id: brand.id,
-            brand: props.brandPutForm.values.brand || brand.brand,
-            image: props.brandPutForm.values.image || brand.image,
+            ...props.modelPostForm.values,
+            modelYear: parseInt(props.modelPostForm.values.modelYear, 10),
         };
-        props.actionPutBrand(values);
+        props.actionPostModel(values);
+    };
+
+    const handleSetBrandSelect = () => {
+        const options = [<MenuItem key={0} aria-label="None" value="" />];
+        brands.forEach((brand) => {
+            options.push(
+                <MenuItem value={brand.id} key={brand.id}>
+                    {brand.brand}
+                </MenuItem>,
+            );
+        });
+
+        return options;
+    };
+
+    const handleSetSegmentSelect = () => {
+        const options = [<MenuItem key={0} aria-label="None" value="" />];
+        segments.forEach((segment) => {
+            options.push(
+                <MenuItem value={segment.id} key={segment.id}>
+                    {segment.segment}
+                </MenuItem>,
+            );
+        });
+
+        return options;
     };
 
     const handleNotificationDismiss = () => {
@@ -123,7 +149,7 @@ const BrandEdit = (props) => {
             errors: {},
         });
         if (title === 'Success') {
-            router.push(`/brands/view/${brand.brand}`);
+            router.push(`/models/view/${createdModel._id}`);
         }
     };
     if (error) {
@@ -135,50 +161,61 @@ const BrandEdit = (props) => {
             <Breadcrumb
                 links={[
                     {
-                        href: '/brands',
-                        text: 'brands',
+                        href: '/models',
+                        text: 'models',
                     },
                     {
                         href: null,
-                        text: 'brand view',
+                        text: 'model create',
                     },
                 ]}
             />
             <AppBar position="static" className={classes.barRoot}>
                 <Toolbar variant="dense">
-                    <Link href={`/brands/view/${router.query.brand}`}>
-                        <Button color="inherit">View</Button>
-                    </Link>
+                    <p />
+                    <p />
                 </Toolbar>
             </AppBar>
             <Card id="noShadow">
                 <CardContent className={classes.cardContent}>
-                    <form
-                        name="contact"
-                        onSubmit={handleSubmit(handlePutBrandFormSubmit)}
-                    >
+                    <form onSubmit={handleSubmit(handlePostModelFormSubmit)}>
                         <div className="form_input">
                             <Field
-                                name="brand"
+                                name="model"
                                 type="text"
-                                label="brand"
+                                label="model"
                                 variant="outlined"
                                 component={renderInput}
-                                validate={[minLength5, maxLength50]}
-                                placeholder={brand.brand}
+                                validate={[required, minLength5, maxLength50]}
                                 autoFocus
                             />
                         </div>
                         <div className="form_input">
                             <Field
-                                name="image"
-                                type="text"
-                                label="image"
-                                placeholder={brand.image}
+                                name="modelYear"
+                                type="number"
+                                label="modelYear"
                                 variant="outlined"
                                 component={renderInput}
-                                validate={[minLength5, maxLength50]}
+                                validate={[required]}
                             />
+                        </div>
+                        <div className="form_input form_select">
+                            <Field name="brand" label="brand" component={RenderSelect}>
+                                {handleSetBrandSelect()}
+                            </Field>
+                            <span id="no_cat_search" className="form_error" />
+                        </div>
+                        <div className="form_input form_select">
+                            <Field
+                                name="segment"
+                                label="segment"
+                                component={RenderSelect}
+                                validate={[required]}
+                            >
+                                {handleSetSegmentSelect()}
+                            </Field>
+                            <span id="no_cat_search" className="form_error" />
                         </div>
                         <div className="form_input">
                             <Field
@@ -187,6 +224,7 @@ const BrandEdit = (props) => {
                                 checked={isActive}
                                 onChange={handleIsActiveChange}
                                 component={renderSwitch}
+                                validate={required}
                             />
                         </div>
                         <FormSubmit
@@ -206,27 +244,26 @@ const BrandEdit = (props) => {
     );
 };
 
-BrandEdit.propTypes = {
-    brand: PropTypes.object.isRequired,
-    dataPutBrand: PropTypes.any,
-    errorPutBrand: PropTypes.any,
+ModelCreate.propTypes = {
+    dataPostModel: PropTypes.any,
+    errorPostModel: PropTypes.any,
     isLoading: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => {
     return {
-        dataPutBrand: state.brand.dataPutBrand,
-        errorPutBrand: state.brand.errorPutBrand,
-        isLoading: state.brand.isLoading,
-        brandPutForm: state.form.BrandPutForm,
+        dataPostModel: state.model.dataPostModel,
+        errorPostModel: state.model.errorPostModel,
+        isLoading: state.model.isLoading,
+        modelPostForm: state.form.ModelPostForm,
     };
 };
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
-            actionPutBrand,
-            actionSetPutBrandToNull,
+            actionPostModel,
+            actionSetPostModelToNull,
         },
         dispatch,
     );
@@ -237,38 +274,17 @@ export default connect(
     mapDispatchToProps,
 )(
     reduxForm({
-        form: 'BrandPutForm',
-    })(BrandEdit),
+        form: 'ModelPostForm',
+    })(ModelCreate),
 );
 
-const queryQl = `query getBrand(
-    $brand: [String!]
-) {
-    brands(
-         brand_list: $brand
-    ) {
-        id
-        brand
-        isActive
-        image
-    }
-}`;
-
-export async function getServerSideProps(context) {
-    const { brand: brandParam } = context.params;
-    let brandInput = brandParam.replace(/-/g, ' ');
-    if (brandParam === 'bmw') {
-        brandInput = brandParam.toUpperCase();
-    } else {
-        brandInput = capitalize(brandParam);
-    }
-    const variables = {
-        brand: [brandInput],
-    };
-    const data = await apiQl(queryQl, variables, false);
+export async function getServerSideProps() {
+    const brands = await getBrands();
+    const segments = await getSegments();
     return {
         props: {
-            brand: data.data.brands[0],
+            brands: brands.data.brands,
+            segments: segments.data.segments,
         },
     };
 }

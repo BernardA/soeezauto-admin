@@ -1,14 +1,13 @@
 /* eslint-disable react/display-name */
 import React, { useEffect, useState } from 'react';
 import MUIDataTable from 'mui-datatables';
-import { Button } from '@material-ui/core';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { Button, AppBar, Toolbar } from '@material-ui/core';
+import { makeStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { Check, Close } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 import { apiQl } from 'lib/functions';
 import Breadcrumb from 'components/std/breadcrumb';
 import Link from 'components/std/link';
-import { urlWriter } from 'tools/functions';
 
 const getMuiTheme = () =>
     createMuiTheme({
@@ -53,18 +52,47 @@ const getMuiTheme = () =>
         },
     });
 
-const Brands = ({ brands }) => {
-    const [allBrands, setAllBrands] = useState(null);
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+    },
+    title: {
+        flexGrow: 1,
+    },
+    barRoot: {
+        backgroundColor: 'initial',
+        color: 'initial',
+        '& .MuiToolbar-root': {
+            justifyContent: 'end',
+        },
+    },
+    cardContent: {
+        '& div': {
+            marginBottom: 15,
+        },
+        '& .MuiFormControl-root': {
+            width: '100%',
+        },
+    },
+}));
+
+const Versions = ({ versions }) => {
+    const classes = useStyles();
+    const [allVersions, setAllVersions] = useState(null);
     useEffect(() => {
-        if (brands) {
+        if (versions) {
             const data = [];
-            brands.map((brand) =>
+            versions.map((version) =>
                 data.push({
-                    id: brand.id,
-                    brand: brand.brand,
-                    isActive: brand.isActive,
-                    edit: brand.brand,
-                    view: brand.brand,
+                    id: version.id,
+                    model: version.model.model,
+                    version: version.version,
+                    isActive: version.isActive,
+                    edit: version._id,
+                    view: version._id,
                 }),
             );
 
@@ -73,7 +101,10 @@ const Brands = ({ brands }) => {
                     name: 'id',
                 },
                 {
-                    name: 'brand',
+                    name: 'model',
+                },
+                {
+                    name: 'version',
                 },
                 {
                     name: 'isActive',
@@ -89,7 +120,7 @@ const Brands = ({ brands }) => {
                     options: {
                         customBodyRender: (value) => {
                             return (
-                                <Link href={`/brands/edit/${urlWriter(value)}`}>
+                                <Link href={`/versions/edit/${value}`}>
                                     <Button variant="outlined" size="small">
                                         Edit
                                     </Button>
@@ -104,7 +135,7 @@ const Brands = ({ brands }) => {
                     options: {
                         customBodyRender: (value) => {
                             return (
-                                <Link href={`/brands/view/${urlWriter(value)}`}>
+                                <Link href={`/versions/view/${value}`}>
                                     <Button variant="outlined" size="small">
                                         View
                                     </Button>
@@ -114,12 +145,12 @@ const Brands = ({ brands }) => {
                     },
                 },
             ];
-            setAllBrands({
+            setAllVersions({
                 data,
                 columns,
             });
         }
-    }, [brands]);
+    }, [versions]);
 
     const options = {
         sort: true,
@@ -135,23 +166,31 @@ const Brands = ({ brands }) => {
         selectableRows: 'none',
         selectableRowsHeader: false,
     };
+
     return (
         <>
             <Breadcrumb
                 links={[
                     {
                         href: null,
-                        text: 'brands',
+                        text: 'versions',
                     },
                 ]}
             />
-            <div>Brands</div>
+            <AppBar position="static" className={classes.barRoot}>
+                <Toolbar variant="dense">
+                    <p />
+                    <Link href="/versions/create">
+                        <Button color="inherit">Create</Button>
+                    </Link>
+                </Toolbar>
+            </AppBar>
             <div>
-                {allBrands && (
+                {allVersions && (
                     <MuiThemeProvider theme={getMuiTheme()}>
                         <MUIDataTable
-                            data={allBrands.data}
-                            columns={allBrands.columns}
+                            data={allVersions.data}
+                            columns={allVersions.columns}
                             options={options}
                         />
                     </MuiThemeProvider>
@@ -161,37 +200,31 @@ const Brands = ({ brands }) => {
     );
 };
 
-Brands.propTypes = {
-    brands: PropTypes.array.isRequired,
+Versions.propTypes = {
+    versions: PropTypes.array.isRequired,
 };
 
-export default Brands;
+export default Versions;
 
-const queryQl = `query getBrandsModels {
-    brands(
-        isActive: true
-        _order: {brand: "ASC"}
-    ) {
+const queryQl = `query getVersions {
+    versions {
         id
-        brand
-        isActive
-        image
-        models(
-            isActive: true
-            _order: {model: "ASC"}
-        ){
+        _id
+    	version
+        model {
             id
             model
-            modelYear
         }
+        isActive
     }
-}`;
+}
+`;
 
 export async function getServerSideProps() {
     const data = await apiQl(queryQl, null, false);
     return {
         props: {
-            brands: data.data.brands,
+            versions: data.data.versions,
         },
     };
 }

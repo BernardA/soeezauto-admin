@@ -151,7 +151,7 @@ const Layout = (props) => {
                 <List>
                     {['Brands', 'Segments', 'Models', 'Versions'].map((text) => (
                         <ListItem button key={text}>
-                            <Link href="/brands">
+                            <Link href={`/${text.toLowerCase()}`}>
                                 <ListItemText primary={text} />
                             </Link>
                         </ListItem>

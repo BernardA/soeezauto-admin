@@ -12,7 +12,6 @@ import localforage from 'localforage';
 import { apiQl, errorParserGraphql } from '../../lib/functions';
 
 function* putBrand(action) {
-    console.log('action', action);
     const queryQl = `mutation putBrand(
     $id: ID!
     $brand: String
