@@ -90,6 +90,48 @@ export const PUT_VERSION_ERROR = 'PUT_VERSION_ERROR';
 
 export const SET_PUT_VERSION_TO_NULL = 'SET_PUT_VERSION_TO_NULL';
 
+export const POST_MOTOR = 'POST_MOTOR';
+export const POST_MOTOR_INIT = 'POST_MOTOR_INIT';
+export const POST_MOTOR_OK = 'POST_MOTOR_OK';
+export const POST_MOTOR_ERROR = 'POST_MOTOR_ERROR';
+
+export const SET_POST_MOTOR_TO_NULL = 'SET_POST_MOTOR_TO_NULL';
+
+export const PUT_MOTOR = 'PUT_MOTOR';
+export const PUT_MOTOR_INIT = 'PUT_MOTOR_INIT';
+export const PUT_MOTOR_OK = 'PUT_MOTOR_OK';
+export const PUT_MOTOR_ERROR = 'PUT_MOTOR_ERROR';
+
+export const SET_PUT_MOTOR_TO_NULL = 'SET_PUT_MOTOR_TO_NULL';
+
+export const POST_MEASURE = 'POST_MEASURE';
+export const POST_MEASURE_INIT = 'POST_MEASURE_INIT';
+export const POST_MEASURE_OK = 'POST_MEASURE_OK';
+export const POST_MEASURE_ERROR = 'POST_MEASURE_ERROR';
+
+export const SET_POST_MEASURE_TO_NULL = 'SET_POST_MEASURE_TO_NULL';
+
+export const PUT_MEASURE = 'PUT_MEASURE';
+export const PUT_MEASURE_INIT = 'PUT_MEASURE_INIT';
+export const PUT_MEASURE_OK = 'PUT_MEASURE_OK';
+export const PUT_MEASURE_ERROR = 'PUT_MEASURE_ERROR';
+
+export const SET_PUT_MEASURE_TO_NULL = 'SET_PUT_MEASURE_TO_NULL';
+
+export const POST_PERFORMANCE = 'POST_PERFORMANCE';
+export const POST_PERFORMANCE_INIT = 'POST_PERFORMANCE_INIT';
+export const POST_PERFORMANCE_OK = 'POST_PERFORMANCE_OK';
+export const POST_PERFORMANCE_ERROR = 'POST_PERFORMANCE_ERROR';
+
+export const SET_POST_PERFORMANCE_TO_NULL = 'SET_POST_PERFORMANCE_TO_NULL';
+
+export const PUT_PERFORMANCE = 'PUT_PERFORMANCE';
+export const PUT_PERFORMANCE_INIT = 'PUT_PERFORMANCE_INIT';
+export const PUT_PERFORMANCE_OK = 'PUT_PERFORMANCE_OK';
+export const PUT_PERFORMANCE_ERROR = 'PUT_PERFORMANCE_ERROR';
+
+export const SET_PUT_PERFORMANCE_TO_NULL = 'SET_PUT_PERFORMANCE_TO_NULL';
+
 export function actionPostLogin(values) {
     return {
         type: POST_LOGIN,
@@ -242,5 +284,83 @@ export function actionPutVersion(values) {
 export function actionSetPutVersionToNull() {
     return {
         type: SET_PUT_VERSION_TO_NULL,
+    };
+}
+
+export function actionPostMotor(values) {
+    return {
+        type: POST_MOTOR,
+        values,
+    };
+}
+
+export function actionSetPostMotorToNull() {
+    return {
+        type: SET_POST_MOTOR_TO_NULL,
+    };
+}
+
+export function actionPutMotor(values) {
+    return {
+        type: PUT_MOTOR,
+        values,
+    };
+}
+
+export function actionSetPutMotorToNull() {
+    return {
+        type: SET_PUT_MOTOR_TO_NULL,
+    };
+}
+
+export function actionPostMeasure(values) {
+    return {
+        type: POST_MEASURE,
+        values,
+    };
+}
+
+export function actionSetPostMeasureToNull() {
+    return {
+        type: SET_POST_MEASURE_TO_NULL,
+    };
+}
+
+export function actionPutMeasure(values) {
+    return {
+        type: PUT_MEASURE,
+        values,
+    };
+}
+
+export function actionSetPutMeasureToNull() {
+    return {
+        type: SET_PUT_MEASURE_TO_NULL,
+    };
+}
+
+export function actionPostPerformance(values) {
+    return {
+        type: POST_PERFORMANCE,
+        values,
+    };
+}
+
+export function actionSetPostPerformanceToNull() {
+    return {
+        type: SET_POST_PERFORMANCE_TO_NULL,
+    };
+}
+
+export function actionPutPerformance(values) {
+    return {
+        type: PUT_PERFORMANCE,
+        values,
+    };
+}
+
+export function actionSetPutPerformanceToNull() {
+    return {
+        type: SET_PUT_PERFORMANCE_TO_NULL,
     };
 }

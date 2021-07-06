@@ -89,6 +89,21 @@ export const DOORS = [2, 3, 4, 5];
 
 export const TRACTIONS = ['4x4', 'propulsion', 'traction'];
 
+export const FUELS = ['diesel', 'electric', 'gas', 'hybrid'];
+
+export const CYLINDERS = [null, 3, 4, 5, 6, 8];
+
+export const VALVES = [null, 8, 12, 16, 20, 24, 32];
+
+export const ASPIRATIONS = [
+    null,
+    'bi-turbo',
+    'natural',
+    'supercharged',
+    'tri-turbo',
+    'turbo',
+];
+
 export const TRIMS_DISPLAY_MULTIMEDIA = ['/api/trims/273', '/api/trims/463'];
 
 export const TRIMS_LEATHER_SEATS = ['/api/trims/115', '/api/trims/284', '/api/trims/541'];

@@ -79,6 +79,10 @@ const ModelEdit = (props) => {
         if (model) {
             setIsActive(model.isActive);
             change('isActive', model.isActive);
+            change('model', model.model);
+            change('modelYear', model.modelYear);
+            change('brand', model.brand.id);
+            change('segment', model.segment.id);
         }
     }, [model]);
 

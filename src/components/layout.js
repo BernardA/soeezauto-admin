@@ -149,7 +149,15 @@ const Layout = (props) => {
                 </div>
                 <Divider />
                 <List>
-                    {['Brands', 'Segments', 'Models', 'Versions'].map((text) => (
+                    {[
+                        'Brands',
+                        'Segments',
+                        'Models',
+                        'Versions',
+                        'Motors',
+                        'Measures',
+                        'Performances',
+                    ].map((text) => (
                         <ListItem button key={text}>
                             <Link href={`/${text.toLowerCase()}`}>
                                 <ListItemText primary={text} />
