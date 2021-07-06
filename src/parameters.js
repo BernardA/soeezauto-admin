@@ -104,6 +104,8 @@ export const ASPIRATIONS = [
     'turbo',
 ];
 
+export const TRIM_TYPES = ['com', 'easy', 'ent', 'help', 'sec', 'sty'];
+
 export const TRIMS_DISPLAY_MULTIMEDIA = ['/api/trims/273', '/api/trims/463'];
 
 export const TRIMS_LEATHER_SEATS = ['/api/trims/115', '/api/trims/284', '/api/trims/541'];

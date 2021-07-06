@@ -14,6 +14,7 @@ const VersionPostForm = (props) => {
     const {
         models,
         tyres,
+        taxes,
         handleSubmit,
         submitting,
         invalid,
@@ -211,6 +212,22 @@ const VersionPostForm = (props) => {
                     {tyres.map((tyre) => (
                         <MenuItem value={tyre.id} key={tyre.id}>
                             {tyre.tyre}
+                        </MenuItem>
+                    ))}
+                </Field>
+                <span id="no_cat_search" className="form_error" />
+            </div>
+            <div className="form_input form_select">
+                <Field
+                    name="CF"
+                    label="CF"
+                    component={RenderSelect}
+                    validate={[required]}
+                >
+                    <MenuItem key={0} aria-label="None" value="" />
+                    {taxes.map((tax) => (
+                        <MenuItem value={tax.id} key={tax.id}>
+                            {tax.CF}
                         </MenuItem>
                     ))}
                 </Field>

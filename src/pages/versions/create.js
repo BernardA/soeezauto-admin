@@ -10,6 +10,7 @@ import { actionPostVersion, actionSetPostVersionToNull } from 'store/actions';
 import Breadcrumb from 'components/std/breadcrumb';
 import getModels from 'lib/getModels';
 import getTyres from 'lib/getTyres';
+import getTaxes from 'lib/getTaxes';
 import VersionPostForm from 'components/versionPostForm';
 
 const useStyles = makeStyles((theme) => ({
@@ -43,7 +44,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const VersionCreate = (props) => {
-    const { models, tyres, dataPostVersion, errorPostVersion, isLoading, reset } = props;
+    const { models, tyres, taxes, dataPostVersion, errorPostVersion, isLoading, reset } =
+        props;
     const classes = useStyles();
     const [createdVersion, setCreatedVersion] = useState(null);
     const [notification, setNotification] = useState({
@@ -84,6 +86,7 @@ const VersionCreate = (props) => {
             performanceId: `/api/performances/${formValues.performance}`,
             gvw: parseInt(formValues.gvw, 10),
             curbWeight: parseInt(formValues.curbWeight, 10),
+            CF: `/api/taxes/${formValues.CF}`,
         };
         props.actionPostVersion(values);
     };
@@ -124,6 +127,7 @@ const VersionCreate = (props) => {
                         <VersionPostForm
                             models={models}
                             tyres={tyres}
+                            taxes={taxes}
                             handlePostVersionFormSubmit={handlePostVersionFormSubmit}
                         />
                     </div>
@@ -167,10 +171,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(VersionCreate);
 export async function getServerSideProps() {
     const models = await getModels();
     const tyres = await getTyres();
+    const taxes = await getTaxes();
     return {
         props: {
             models: models.data.models,
             tyres: tyres.data.tyres,
+            taxes: taxes.data.taxes,
         },
     };
 }

@@ -6,8 +6,10 @@ import model from './model';
 import motor from './motor';
 import password from './password';
 import performance from './performance';
+import price from './price';
 import version from './version';
 import system from './system';
+import trim from './trim';
 
 export default function* rootSaga() {
     yield all([
@@ -18,7 +20,9 @@ export default function* rootSaga() {
         motor(),
         password(),
         performance(),
+        price(),
         version(),
         system(),
+        trim(),
     ]);
 }

@@ -132,6 +132,34 @@ export const PUT_PERFORMANCE_ERROR = 'PUT_PERFORMANCE_ERROR';
 
 export const SET_PUT_PERFORMANCE_TO_NULL = 'SET_PUT_PERFORMANCE_TO_NULL';
 
+export const POST_PRICE = 'POST_PRICE';
+export const POST_PRICE_INIT = 'POST_PRICE_INIT';
+export const POST_PRICE_OK = 'POST_PRICE_OK';
+export const POST_PRICE_ERROR = 'POST_PRICE_ERROR';
+
+export const SET_POST_PRICE_TO_NULL = 'SET_POST_PRICE_TO_NULL';
+
+export const PUT_PRICE = 'PUT_PRICE';
+export const PUT_PRICE_INIT = 'PUT_PRICE_INIT';
+export const PUT_PRICE_OK = 'PUT_PRICE_OK';
+export const PUT_PRICE_ERROR = 'PUT_PRICE_ERROR';
+
+export const SET_PUT_PRICE_TO_NULL = 'SET_PUT_PRICE_TO_NULL';
+
+export const POST_TRIM = 'POST_TRIM';
+export const POST_TRIM_INIT = 'POST_TRIM_INIT';
+export const POST_TRIM_OK = 'POST_TRIM_OK';
+export const POST_TRIM_ERROR = 'POST_TRIM_ERROR';
+
+export const SET_POST_TRIM_TO_NULL = 'SET_POST_TRIM_TO_NULL';
+
+export const PUT_TRIM = 'PUT_TRIM';
+export const PUT_TRIM_INIT = 'PUT_TRIM_INIT';
+export const PUT_TRIM_OK = 'PUT_TRIM_OK';
+export const PUT_TRIM_ERROR = 'PUT_TRIM_ERROR';
+
+export const SET_PUT_TRIM_TO_NULL = 'SET_PUT_TRIM_TO_NULL';
+
 export function actionPostLogin(values) {
     return {
         type: POST_LOGIN,
@@ -362,5 +390,57 @@ export function actionPutPerformance(values) {
 export function actionSetPutPerformanceToNull() {
     return {
         type: SET_PUT_PERFORMANCE_TO_NULL,
+    };
+}
+
+export function actionPostPrice(values) {
+    return {
+        type: POST_PRICE,
+        values,
+    };
+}
+
+export function actionSetPostPriceToNull() {
+    return {
+        type: SET_POST_PRICE_TO_NULL,
+    };
+}
+
+export function actionPutPrice(values) {
+    return {
+        type: PUT_PRICE,
+        values,
+    };
+}
+
+export function actionSetPutPriceToNull() {
+    return {
+        type: SET_PUT_PRICE_TO_NULL,
+    };
+}
+
+export function actionPostTrim(values) {
+    return {
+        type: POST_TRIM,
+        values,
+    };
+}
+
+export function actionSetPostTrimToNull() {
+    return {
+        type: SET_POST_TRIM_TO_NULL,
+    };
+}
+
+export function actionPutTrim(values) {
+    return {
+        type: PUT_TRIM,
+        values,
+    };
+}
+
+export function actionSetPutTrimToNull() {
+    return {
+        type: SET_PUT_TRIM_TO_NULL,
     };
 }

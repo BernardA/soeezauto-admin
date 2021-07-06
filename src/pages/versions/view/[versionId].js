@@ -22,6 +22,7 @@ import PropTypes from 'prop-types';
 import { apiQl } from 'lib/functions';
 import Link from 'components/std/link';
 import Breadcrumb from 'components/std/breadcrumb';
+import { showtime } from 'tools/functions';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -156,7 +157,6 @@ const VersionView = (props) => {
                                 </Typography>
                             </FormControl>
                         </div>
-
                         <div>
                             <FormControl>
                                 <Typography component="span">Engine</Typography>
@@ -288,6 +288,39 @@ const VersionView = (props) => {
                         </div>
                         <div>
                             <FormControl>
+                                <Typography component="span">CF</Typography>
+                                <Typography variant="body2">{version.CF.CF}</Typography>
+                            </FormControl>
+                        </div>
+                        <div>
+                            <FormControl>
+                                <Typography component="span">Prices</Typography>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Id</TableCell>
+                                            <TableCell>Price</TableCell>
+                                            <TableCell>Promo</TableCell>
+                                            <TableCell>Updated at</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {version.prices.edges.map((price) => (
+                                            <TableRow key={price.node.id}>
+                                                <TableCell>{price.node.id}</TableCell>
+                                                <TableCell>{price.node.price}</TableCell>
+                                                <TableCell>{price.node.promo}</TableCell>
+                                                <TableCell>
+                                                    {showtime(price.node.updatedAt)}
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </FormControl>
+                        </div>
+                        <div>
+                            <FormControl>
                                 <List>
                                     {version.trims.map((trim) => (
                                         <ListItem key={trim.id}>{trim.trim}</ListItem>
@@ -313,6 +346,7 @@ const queryQl = `query getVersion(
     ){
     version(id: $id){
         id
+        _id
         version
         model {
             id
@@ -331,13 +365,19 @@ const queryQl = `query getVersion(
             tyre
         }
         prices(
+            first: 100
+            after: null
             _order: {updatedAt: "DESC"}
         ) {
-            id
-            updatedAt
-            price
-            promo
-            isActive
+            edges {
+                node {
+                    id
+                    updatedAt
+                    price
+                    promo
+                    isActive
+                }
+            }
         }
         CF {
             CF

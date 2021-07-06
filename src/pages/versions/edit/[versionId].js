@@ -15,6 +15,7 @@ import { actionPutVersion, actionSetPutVersionToNull } from 'store/actions';
 import Breadcrumb from 'components/std/breadcrumb';
 import Link from 'components/std/link';
 import getTyres from 'lib/getTyres';
+import getTaxes from 'lib/getTaxes';
 import { apiQl } from 'lib/functions';
 import RenderSelect from 'components/formInputs/formInputRenderSelect';
 import { BODY_TYPES, GEARBOXES, DOORS, PLACES, TRACTIONS } from 'parameters';
@@ -55,6 +56,7 @@ const VersionEdit = (props) => {
     const {
         version,
         tyres,
+        taxes,
         dataPutVersion,
         errorPutVersion,
         isLoading,
@@ -79,7 +81,21 @@ const VersionEdit = (props) => {
     useEffect(() => {
         if (version) {
             setIsActive(version.isActive);
+            change('version', version.version);
             change('isActive', version.isActive);
+            change('motor', version.motor.id);
+            change('measures', version.measures.id);
+            change('performance', version.performance.id);
+            change('bodyType', version.bodyType);
+            change('gearbox', version.gearbox);
+            change('places', version.places);
+            change('doors', version.doors);
+            change('traction', version.traction);
+            change('gvw', version.gvw);
+            version.curbWeight && change('curbWeight', version.curbWeight);
+            change('tyreFront', version.tyreFront.id);
+            version.tyreBack && change('tyreBack', version.tyreBack.id);
+            change('CF', version.CF.id);
         }
     }, [version]);
 
@@ -113,13 +129,6 @@ const VersionEdit = (props) => {
         const formValues = props.versionPutForm.values;
         const values = {
             ...formValues,
-            motorId: formValues.motor ? `/api/motors/${formValues.motor}` : undefined,
-            measureId: formValues.measures
-                ? `/api/measures/${formValues.measures}`
-                : undefined,
-            performanceId: formValues.performance
-                ? `/api/performances/${formValues.performance}`
-                : undefined,
             gvw: formValues.gvw ? parseInt(formValues.gvw, 10) : undefined,
             curbWeight: formValues.curbWeight
                 ? parseInt(formValues.curbWeight, 10)
@@ -335,6 +344,17 @@ const VersionEdit = (props) => {
                             </Field>
                             <span id="no_cat_search" className="form_error" />
                         </div>
+                        <div className="form_input form_select">
+                            <Field name="CF" label="CF" component={RenderSelect}>
+                                <MenuItem key={0} aria-label="None" value="" />
+                                {taxes.map((tax) => (
+                                    <MenuItem value={tax.id} key={tax.id}>
+                                        {tax.CF}
+                                    </MenuItem>
+                                ))}
+                            </Field>
+                            <span id="no_cat_search" className="form_error" />
+                        </div>
                         <FormSubmit
                             pristine={pristine}
                             submitting={submitting}
@@ -399,6 +419,7 @@ const queryQl = `query getVersion(
             id
             model
         }
+        bodyType
         gearbox
         places
         doors
@@ -406,21 +427,28 @@ const queryQl = `query getVersion(
         gvw
         traction
         tyreFront {
+            id
             tyre
         }
         tyreBack {
+            id
             tyre
         }
         prices(
             _order: {updatedAt: "DESC"}
         ) {
-            id
-            updatedAt
-            price
-            promo
-            isActive
+            edges {
+                node {
+                    id
+                    updatedAt
+                    price
+                    promo
+                    isActive
+                }
+            }
         }
         CF {
+            id
             CF
         }
         motor {
@@ -467,10 +495,12 @@ export async function getServerSideProps(context) {
     };
     const data = await apiQl(queryQl, variables, false);
     const tyres = await getTyres();
+    const taxes = await getTaxes();
     return {
         props: {
             version: data.data.version,
             tyres: tyres.data.tyres,
+            taxes: taxes.data.taxes,
         },
     };
 }

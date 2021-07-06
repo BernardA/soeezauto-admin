@@ -7,8 +7,10 @@ import model from './model';
 import motor from './motor';
 import password from './password';
 import performance from './performance';
+import price from './price';
 import version from './version';
 import system from './system';
+import trim from './trim';
 
 const rootReducer = combineReducers({
     form: formReducer,
@@ -19,8 +21,10 @@ const rootReducer = combineReducers({
     motor,
     password,
     performance,
+    price,
     version,
     system,
+    trim,
 });
 
 export default rootReducer;

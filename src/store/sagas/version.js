@@ -31,6 +31,7 @@ function* postVersion(action) {
         $curbWeight: Int
         $tyreFront: String!
         $tyreBack: String
+        $CF: String!
         ){
             createVersion(
                 input: {
@@ -48,6 +49,7 @@ function* postVersion(action) {
                     curbWeight: $curbWeight
                     tyreFront: $tyreFront
                     tyreBack: $tyreBack
+                    CF: $CF
                 }
         ) {
             version{
@@ -71,6 +73,7 @@ function* postVersion(action) {
         gvw: action.values.gvw,
         curbWeight: action.values.curbWeight,
         tyreFront: action.values.tyreFront,
+        CF: action.values.CF,
     };
     try {
         yield put({
@@ -135,6 +138,7 @@ function* putVersion(action) {
         $curbWeight: Int
         $tyreFront: String
         $tyreBack: String
+        $CF: String
         ){
             updateVersion(
                 input: {
@@ -153,6 +157,7 @@ function* putVersion(action) {
                     curbWeight: $curbWeight
                     tyreFront: $tyreFront
                     tyreBack: $tyreBack
+                    CF: $CF
                 }
         ) {
             version{
@@ -177,6 +182,7 @@ function* putVersion(action) {
         gvw: action.values.gvw,
         curbWeight: action.values.curbWeight,
         tyreFront: action.values.tyreFront,
+        CF: action.values.CF,
     };
     try {
         yield put({
