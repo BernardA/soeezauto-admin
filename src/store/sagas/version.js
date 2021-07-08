@@ -11,6 +11,14 @@ import {
     PUT_VERSION_INIT,
     PUT_VERSION_OK,
     PUT_VERSION_ERROR,
+    GET_VERSION_TRIMS,
+    GET_VERSION_TRIMS_INIT,
+    GET_VERSION_TRIMS_OK,
+    GET_VERSION_TRIMS_ERROR,
+    PUT_VERSION_TRIMS,
+    PUT_VERSION_TRIMS_INIT,
+    PUT_VERSION_TRIMS_OK,
+    PUT_VERSION_TRIMS_ERROR,
 } from 'store/actions';
 import localforage from 'localforage';
 import { apiQl, errorParserGraphql } from '../../lib/functions';
@@ -230,10 +238,143 @@ function* putVersion(action) {
     }
 }
 
+function* getVersionTrims(action) {
+    const queryQl = `query getVersionTrims(
+        $id: ID!
+    ) {
+        version (
+			id: $id
+        ) {
+		    id
+    		version
+    		trims(_order: {trim: "ASC"}) {
+                id
+                trim
+                trimType
+            }
+        }
+    }`;
+
+    const variables = {
+        id: action.versionId,
+    };
+    try {
+        yield put({
+            type: GET_VERSION_TRIMS_INIT,
+        });
+        const data = yield call(apiQl, queryQl, variables);
+        if (data.errors) {
+            yield put({
+                type: GET_VERSION_TRIMS_ERROR,
+                data: errorParserGraphql(data.errors),
+            });
+            yield put({
+                type: CLIENT_LOG,
+                data: {
+                    message: errorParserGraphql(data.errors),
+                    action: GET_VERSION_TRIMS,
+                },
+            });
+        } else {
+            yield put({
+                type: GET_VERSION_TRIMS_OK,
+                data: data.data.version,
+            });
+        }
+    } catch (error) {
+        const isOffline = !!(
+            error.response === undefined || error.code === 'ECONNABORTED'
+        );
+        if (error.response.status === 401) {
+            yield put({
+                type: LOGOUT_TOKEN_EXPIRED,
+            });
+        } else if (isOffline) {
+            // check if offline event already fired
+            localforage.getItem('offline-event-fired').then((value) => {
+                if (value === null) {
+                    localforage.setItem('offline-event-fired', true);
+                }
+            });
+            yield put({
+                type: CHECK_ONLINE_STATUS_ERROR,
+                isOnline: false,
+            });
+        }
+    }
+}
+
+function* putVersionTrims(action) {
+    const queryQl = `mutation putVersiontrim (
+        $id: ID!
+        $trims: [String!]
+    ) {
+        updateVersion(input: {
+            id: $id
+            trims: $trims
+        }) {
+            version{
+                id
+            }
+        }
+    }`;
+
+    const variables = {
+        id: action.values.id,
+        trims: action.values.trims,
+    };
+    try {
+        yield put({
+            type: PUT_VERSION_TRIMS_INIT,
+        });
+        const data = yield call(apiQl, queryQl, variables);
+        if (data.errors) {
+            yield put({
+                type: PUT_VERSION_TRIMS_ERROR,
+                data: errorParserGraphql(data.errors),
+            });
+            yield put({
+                type: CLIENT_LOG,
+                data: {
+                    message: errorParserGraphql(data.errors),
+                    action: PUT_VERSION_TRIMS,
+                },
+            });
+        } else {
+            yield put({
+                type: PUT_VERSION_TRIMS_OK,
+                data: data.data.updateVersion,
+            });
+        }
+    } catch (error) {
+        const isOffline = !!(
+            error.response === undefined || error.code === 'ECONNABORTED'
+        );
+        if (error.response.status === 401) {
+            yield put({
+                type: LOGOUT_TOKEN_EXPIRED,
+            });
+        } else if (isOffline) {
+            // check if offline event already fired
+            localforage.getItem('offline-event-fired').then((value) => {
+                if (value === null) {
+                    localforage.setItem('offline-event-fired', true);
+                }
+            });
+            yield put({
+                type: CHECK_ONLINE_STATUS_ERROR,
+                isOnline: false,
+            });
+        }
+    }
+}
+
 // eslint-disable-next-line func-names
 export default function* system() {
     yield all([
         takeLatest(POST_VERSION, postVersion),
         takeLatest(PUT_VERSION, putVersion),
+        takeLatest(GET_VERSION_TRIMS, getVersionTrims),
+        takeLatest(PUT_VERSION_TRIMS, putVersionTrims),
     ]);
 }

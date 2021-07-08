@@ -4,9 +4,9 @@ import MUIDataTable from 'mui-datatables';
 import { Button, AppBar, Toolbar } from '@material-ui/core';
 import { makeStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { apiQl } from 'lib/functions';
 import Breadcrumb from 'components/std/breadcrumb';
 import Link from 'components/std/link';
+import getTrims from 'lib/getTrims';
 
 const getMuiTheme = () =>
     createMuiTheme({
@@ -179,23 +179,11 @@ Trims.propTypes = {
 
 export default Trims;
 
-const queryQl = `query getTrims{
-        trims(
-          _order: {trim: "ASC"}
-        ){
-    		id
-    		_id
-            trim
-    		trimType
-        }
-    }
-`;
-
 export async function getServerSideProps() {
-    const data = await apiQl(queryQl, null, false);
+    const trims = await getTrims();
     return {
         props: {
-            trims: data.data.trims,
+            trims: trims.data.trims,
         },
     };
 }

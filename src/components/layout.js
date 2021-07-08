@@ -159,6 +159,7 @@ const Layout = (props) => {
                         'Performances',
                         'Prices',
                         'Trims',
+                        'Versiontrims',
                     ].map((text) => (
                         <ListItem button key={text}>
                             <Link href={`/${text.toLowerCase()}`}>

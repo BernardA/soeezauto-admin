@@ -160,6 +160,20 @@ export const PUT_TRIM_ERROR = 'PUT_TRIM_ERROR';
 
 export const SET_PUT_TRIM_TO_NULL = 'SET_PUT_TRIM_TO_NULL';
 
+export const GET_VERSION_TRIMS = 'GET_VERSION_TRIMS';
+export const GET_VERSION_TRIMS_INIT = 'GET_VERSION_TRIMS_INIT';
+export const GET_VERSION_TRIMS_OK = 'GET_VERSION_TRIMS_OK';
+export const GET_VERSION_TRIMS_ERROR = 'GET_VERSION_TRIM_ERROR';
+
+export const SET_GET_VERSION_TRIMS_TO_NULL = 'SET_GET_VERSION_TRIMS_TO_NULL';
+
+export const PUT_VERSION_TRIMS = 'PUT_VERSION_TRIMS';
+export const PUT_VERSION_TRIMS_INIT = 'PUT_VERSION_TRIMS_INIT';
+export const PUT_VERSION_TRIMS_OK = 'PUT_VERSION_TRIMS_OK';
+export const PUT_VERSION_TRIMS_ERROR = 'PUT_VERSION_TRIM_ERROR';
+
+export const SET_PUT_VERSION_TRIMS_TO_NULL = 'SET_PUT_VERSION_TRIMS_TO_NULL';
+
 export function actionPostLogin(values) {
     return {
         type: POST_LOGIN,
@@ -442,5 +456,31 @@ export function actionPutTrim(values) {
 export function actionSetPutTrimToNull() {
     return {
         type: SET_PUT_TRIM_TO_NULL,
+    };
+}
+
+export function actionGetVersionTrims(versionId) {
+    return {
+        type: GET_VERSION_TRIMS,
+        versionId,
+    };
+}
+
+export function actionSetGetVersionTrimsToNull() {
+    return {
+        type: SET_GET_VERSION_TRIMS_TO_NULL,
+    };
+}
+
+export function actionPutVersionTrims(values) {
+    return {
+        type: PUT_VERSION_TRIMS,
+        values,
+    };
+}
+
+export function actionSetPutVersionTrimsToNull() {
+    return {
+        type: SET_PUT_VERSION_TRIMS_TO_NULL,
     };
 }
