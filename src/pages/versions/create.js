@@ -6,12 +6,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Loading from 'components/std/loading';
 import NotifierDialog from 'components/std/notifierDialog';
-import { actionPostVersion, actionSetPostVersionToNull } from 'store/actions';
+import { actionSetPostVersionToNull } from 'store/actions';
 import Breadcrumb from 'components/std/breadcrumb';
 import getModels from 'lib/getModels';
 import getTyres from 'lib/getTyres';
 import getTaxes from 'lib/getTaxes';
 import VersionPostForm from 'components/versionPostForm';
+import Link from 'components/std/link';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,8 +33,9 @@ const useStyles = makeStyles((theme) => ({
     },
     cardContent: {
         display: 'grid',
-        gridTemplateColumns: '300px',
-        justifyContent: 'center',
+        gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr',
+        justifyContent: 'space-between',
+        gap: 10,
         '& div': {
             marginBottom: 5,
         },
@@ -44,10 +46,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const VersionCreate = (props) => {
-    const { models, tyres, taxes, dataPostVersion, errorPostVersion, isLoading, reset } =
-        props;
+    const { models, tyres, taxes, dataPostVersion, errorPostVersion, isLoading } = props;
     const classes = useStyles();
-    const [createdVersion, setCreatedVersion] = useState(null);
+    const [createdVersion, setCreatedVersion] = useState([]);
     const [notification, setNotification] = useState({
         status: '',
         title: '',
@@ -64,7 +65,7 @@ const VersionCreate = (props) => {
                 errors: {},
             });
             props.actionSetPostVersionToNull();
-            setCreatedVersion(dataPostVersion.version.id);
+            setCreatedVersion((prevState) => [...prevState, dataPostVersion.version._id]);
         }
         if (errorPostVersion) {
             setNotification({
@@ -75,21 +76,7 @@ const VersionCreate = (props) => {
             });
             props.actionSetPostVersionToNull();
         }
-    }, [dataPostVersion, errorPostVersion, reset]);
-
-    const handlePostVersionFormSubmit = () => {
-        const formValues = props.versionPostForm.values;
-        const values = {
-            ...formValues,
-            motorId: `/api/motors/${formValues.motor}`,
-            measureId: `/api/measures/${formValues.measures}`,
-            performanceId: `/api/performances/${formValues.performance}`,
-            gvw: parseInt(formValues.gvw, 10),
-            curbWeight: parseInt(formValues.curbWeight, 10),
-            CF: `/api/taxes/${formValues.CF}`,
-        };
-        props.actionPostVersion(values);
-    };
+    }, [dataPostVersion, errorPostVersion]);
 
     const handleNotificationDismiss = () => {
         setNotification({
@@ -99,6 +86,7 @@ const VersionCreate = (props) => {
             errors: {},
         });
     };
+
     return (
         <div>
             {isLoading ? <Loading /> : null}
@@ -122,15 +110,30 @@ const VersionCreate = (props) => {
             </AppBar>
             <Card id="noShadow">
                 <CardContent className={classes.cardContent}>
-                    <div>
-                        <p>{createdVersion && createdVersion.id}</p>
-                        <VersionPostForm
-                            models={models}
-                            tyres={tyres}
-                            taxes={taxes}
-                            handlePostVersionFormSubmit={handlePostVersionFormSubmit}
-                        />
-                    </div>
+                    {[1, 2, 3, 4, 5, 6].map((index) => (
+                        <div key={index}>
+                            <p>
+                                {createdVersion[index - 1] ? (
+                                    <Link
+                                        href={`/versions/view/${
+                                            createdVersion[index - 1]
+                                        }`}
+                                    >
+                                        {createdVersion[index - 1]}
+                                    </Link>
+                                ) : (
+                                    'tbd'
+                                )}
+                            </p>
+                            <VersionPostForm
+                                models={models}
+                                form={`VersionPostForm_${index}`}
+                                tyres={tyres}
+                                taxes={taxes}
+                                index={index}
+                            />
+                        </div>
+                    ))}
                 </CardContent>
             </Card>
             <NotifierDialog
@@ -152,14 +155,12 @@ const mapStateToProps = (state) => {
         dataPostVersion: state.version.dataPostVersion,
         errorPostVersion: state.version.errorPostVersion,
         isLoading: state.version.isLoading,
-        versionPostForm: state.form.VersionPostForm,
     };
 };
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
-            actionPostVersion,
             actionSetPostVersionToNull,
         },
         dispatch,

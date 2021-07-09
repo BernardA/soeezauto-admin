@@ -348,6 +348,7 @@ const queryQl = `query getVersion(
         id
         _id
         version
+        isActive
         model {
             id
             model

@@ -1,8 +1,11 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
-import { MenuItem } from '@material-ui/core';
+import { MenuItem, FormGroup, Fab, Button } from '@material-ui/core';
 import { renderInput } from 'components/formInputs/formInputs';
-import FormSubmit from 'components/formInputs/formSubmit';
+import { actionPostVersion } from 'store/actions';
+import { Clear } from '@material-ui/icons';
 import { maxLength, minLength, required } from 'tools/validator';
 import RenderSelect from 'components/formInputs/formInputRenderSelect';
 import { BODY_TYPES, GEARBOXES, DOORS, PLACES, TRACTIONS } from 'parameters';
@@ -11,17 +14,8 @@ const maxLength50 = maxLength(50);
 const minLength5 = minLength(5);
 
 const VersionPostForm = (props) => {
-    const {
-        models,
-        tyres,
-        taxes,
-        handleSubmit,
-        submitting,
-        invalid,
-        pristine,
-        reset,
-        handlePostVersionFormSubmit,
-    } = props;
+    const { models, tyres, taxes, handleSubmit, submitting, invalid, pristine, reset } =
+        props;
 
     const handleSetModelSelect = () => {
         const options = [
@@ -39,8 +33,20 @@ const VersionPostForm = (props) => {
 
         return options;
     };
+
+    const handleFormSubmit = (values) => {
+        const formValues = {
+            ...values,
+            motorId: `/api/motors/${values.motor}`,
+            measureId: `/api/measures/${values.measures}`,
+            performanceId: `/api/performances/${values.performance}`,
+            gvw: parseInt(values.gvw, 10),
+            curbWeight: parseInt(values.curbWeight, 10),
+        };
+        props.actionPostVersion(formValues);
+    };
     return (
-        <form onSubmit={handleSubmit(handlePostVersionFormSubmit)}>
+        <form onSubmit={handleSubmit(handleFormSubmit)}>
             <div className="form_input form_select">
                 <Field name="model" label="model" component={RenderSelect}>
                     {handleSetModelSelect()}
@@ -233,16 +239,42 @@ const VersionPostForm = (props) => {
                 </Field>
                 <span id="no_cat_search" className="form_error" />
             </div>
-            <FormSubmit
-                pristine={pristine}
-                submitting={submitting}
-                reset={reset}
-                invalid={invalid}
-            />
+            <div className="form_input form_submit">
+                <FormGroup row>
+                    <Fab
+                        disabled={pristine || submitting}
+                        onClick={reset}
+                        variant="round"
+                        color="secondary"
+                        size="small"
+                        type="reset"
+                        aria-label="effacer"
+                    >
+                        <Clear />
+                    </Fab>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        disabled={pristine || submitting || invalid}
+                        name="_submit"
+                        type="submit"
+                        aria-label="envoyer"
+                    >
+                        Envoyer
+                    </Button>
+                </FormGroup>
+            </div>
         </form>
     );
 };
 
-export default reduxForm({
-    form: 'VersionPostForm',
-})(VersionPostForm);
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(
+        {
+            actionPostVersion,
+        },
+        dispatch,
+    );
+}
+
+export default connect(null, mapDispatchToProps)(reduxForm()(VersionPostForm));
