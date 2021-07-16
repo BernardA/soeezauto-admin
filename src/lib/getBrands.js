@@ -3,7 +3,9 @@ import { apiQl } from './functions';
 const queryQl = `query getBrands(
   	    $isActive: Boolean!) {
     brands(
-        isActive: $isActive) {
+        isActive: $isActive
+        _order: {brand: "ASC"}
+    ) {
 		    id
 		    brand
             image
