@@ -4,7 +4,6 @@ import TextField from '@material-ui/core/TextField';
 import { Autocomplete, createFilterOptions } from '@material-ui/lab';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { ROOT_CATEGORIES } from '../../parameters';
 
 const styles = () => ({
     option: {
@@ -40,7 +39,7 @@ function AutocompleteGrouped(field) {
             }
         });
     } else {
-        const main = ROOT_CATEGORIES.split(',');
+        const main = 'ROOT_CATEGORIES'.split(',');
         main.forEach((type) => {
             categories.forEach((cat) => {
                 const category = cat.title;

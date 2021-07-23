@@ -33,6 +33,9 @@ function* postPrice(action) {
             price{
                 id
                 _id
+                version {
+                    id
+                }
             }
         }
     }`;
@@ -40,7 +43,7 @@ function* postPrice(action) {
     const variables = {
         version: action.values.version,
         price: action.values.price,
-        promo: action.values.promo || undefined,
+        promo: action.values.promo || null,
     };
     try {
         yield put({

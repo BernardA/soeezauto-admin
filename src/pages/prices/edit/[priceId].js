@@ -137,7 +137,9 @@ const PriceEdit = (props) => {
             />
             <AppBar position="static" className={classes.barRoot}>
                 <Toolbar variant="dense">
-                    <p />
+                    <Link href="/prices/create">
+                        <Button color="inherit">Create</Button>
+                    </Link>
                     <Link href={`/prices/view/${router.query.priceId}`}>
                         <Button color="inherit">View</Button>
                     </Link>
@@ -227,7 +229,7 @@ const queryQl = `query getPrice(
         }
         price
         promo
-        updatedAt
+        createdAt
     }
 }
 `;

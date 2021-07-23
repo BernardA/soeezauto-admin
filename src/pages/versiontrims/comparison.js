@@ -71,10 +71,18 @@ const useStyles = makeStyles((theme) => ({
         padding: '10px',
         justifyContent: 'space-around',
         '& > div': {
-            flex: '0 0 300px',
+            flex: '0 0 500px',
             margin: '20px 0',
             height: 300,
             overflow: 'scroll',
+        },
+    },
+    trimItem: {
+        margin: 0,
+        padding: 0,
+        '& p': {
+            margin: '5px 0',
+            padding: 0,
         },
     },
     trimRemove: {
@@ -88,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Versiontrims = (props) => {
+const VersiontrimsComparison = (props) => {
     const classes = useStyles();
     const {
         brands,
@@ -107,9 +115,7 @@ const Versiontrims = (props) => {
     const [trimsMatches, setTrimsMatches] = useState([]);
     const [trimsToAdd, setTrimsToAdd] = useState([]);
     const [trimsToDelete, setTrimsToDelete] = useState([]);
-    const [valueSelect1, setValueSelect1] = useState('');
-    const [valueSelect2, setValueSelect2] = useState('');
-    const [activeSelect, setActiveSelect] = useState(null);
+    const [valueSelectTrim, setValueSelectTrim] = useState('');
     const [notification, setNotification] = useState({
         status: '',
         title: '',
@@ -118,56 +124,43 @@ const Versiontrims = (props) => {
     });
 
     useEffect(() => {
-        if (valueSelect1) {
-            setActiveSelect(1);
-            const handleValue = () => {
-                const match = trimsAll.filter((trim) => {
-                    return trim.id === valueSelect1.id;
-                });
-                if (match.length === 0) {
-                    // check if trim is not already in
-                    const check = trimsToAdd.filter((tr) => {
-                        return tr.id === valueSelect1.id;
-                    });
-                    if (check.length > 0) {
-                        setNotification({
-                            status: 'ok_and_dismiss',
-                            title: 'Error',
-                            message: 'Trim already added',
-                            errors: {},
-                        });
-                    } else {
-                        setTrimsToAdd((prevState) => [...prevState, valueSelect1]);
-                    }
-                } else {
-                    setTrimsMatches((prevState) => [...prevState, match[0]]);
-                    setTrimsToDelete((prevState) =>
-                        prevState.filter((trim) => {
-                            return trim.id !== valueSelect1.id;
-                        }),
-                    );
-                }
-            };
-            // populate trimsToDelete
-            const setDelete = new Promise((resolve) => {
-                resolve(setTrimsToDelete(trimsAll));
+        if (valueSelectTrim) {
+            const match = trimsAll.filter((trim) => {
+                return trim.id === valueSelectTrim.id;
             });
-            if (trimsToDelete.length === 0) {
-                setDelete.then(() => {
-                    handleValue();
+            if (match.length === 0) {
+                // check if trim is not already in
+                const check = trimsToAdd.filter((tr) => {
+                    return tr.id === valueSelectTrim.id;
                 });
+                if (check.length > 0) {
+                    setNotification({
+                        status: 'ok_and_dismiss',
+                        title: 'Error',
+                        message: 'Trim already added',
+                        errors: {},
+                    });
+                } else {
+                    setTrimsToAdd((prevState) => [...prevState, valueSelectTrim]);
+                }
             } else {
-                handleValue();
+                setTrimsMatches((prevState) => [...prevState, match[0]]);
+                setTrimsToDelete((prevState) =>
+                    prevState.filter((trim) => {
+                        return trim.id !== valueSelectTrim.id;
+                    }),
+                );
             }
-            setValueSelect1('');
+
+            setValueSelectTrim('');
         }
-    }, [valueSelect1]);
+    }, [valueSelectTrim]);
 
     useEffect(() => {
         if (dataGetVersionTrims) {
             setCurrentVersion(dataGetVersionTrims);
             setTrimsAll(dataGetVersionTrims.trims);
-            setTrimsToDelete([]);
+            setTrimsToDelete(dataGetVersionTrims.trims);
             setTrimsToAdd([]);
             setTrimsMatches([]);
             props.actionSetGetVersionTrimsToNull();
@@ -283,60 +276,6 @@ const Versiontrims = (props) => {
         props.actionPutVersionTrims(values);
     };
 
-    const handleAddTrims = () => {
-        setActiveSelect(2);
-        // check if trim does not already included in delete list
-        const alreadyInToAdd = trimsToAdd.filter((trim) => {
-            return trim.id === valueSelect2.id;
-        });
-        const alreadyInAll = trimsAll.filter((trim) => {
-            return trim.id === valueSelect2.id;
-        });
-        if (alreadyInToAdd.length > 0 || alreadyInAll.length > 0) {
-            setNotification({
-                status: 'ok_and_dismiss',
-                title: 'Error',
-                message: 'Trim already included in add or all list',
-                errors: {},
-            });
-        } else {
-            setTrimsToAdd((prevState) => [...prevState, valueSelect2]);
-        }
-        setValueSelect2('');
-    };
-
-    const handleDeleteTrims = () => {
-        setActiveSelect(2);
-        // check if trim exists in trims all
-        const match = trimsAll.filter((trim) => {
-            return trim.id === valueSelect2.id;
-        });
-        if (match.length === 0) {
-            setNotification({
-                status: 'ok_and_dismiss',
-                title: 'Error',
-                message: 'Trim does not exist in version',
-                errors: {},
-            });
-        } else {
-            // check if trim does not already included in delete list
-            const alreadyIn = trimsToDelete.filter((trim) => {
-                return trim.id === valueSelect2.id;
-            });
-            if (alreadyIn.length > 0) {
-                setNotification({
-                    status: 'ok_and_dismiss',
-                    title: 'Error',
-                    message: 'Trim already included in delete list',
-                    errors: {},
-                });
-            } else {
-                setTrimsToDelete((prevState) => [...prevState, valueSelect2]);
-            }
-        }
-        setValueSelect2('');
-    };
-
     const handleRemoveAddTrim = (event) => {
         const filter = trimsToAdd.filter((trim) => {
             return trim.id !== event.target.id;
@@ -359,21 +298,26 @@ const Versiontrims = (props) => {
             errors: {},
         });
     };
+
     return (
         <div>
             {isLoading ? <Loading /> : null}
             <Breadcrumb
                 links={[
                     {
-                        href: null,
+                        href: '/versiontrims',
                         text: 'versiontrims',
+                    },
+                    {
+                        href: null,
+                        text: 'comparison',
                     },
                 ]}
             />
             <AppBar position="static" className={classes.barRoot}>
                 <Toolbar variant="dense">
-                    <Link href="/prices/create">
-                        <Button color="inherit">Create</Button>
+                    <Link href="/versiontrims/copy">
+                        <Button color="inherit">Copy trims</Button>
                     </Link>
                 </Toolbar>
             </AppBar>
@@ -429,7 +373,7 @@ const Versiontrims = (props) => {
                                         >
                                             Choisir
                                         </MenuItem>
-                                        ,{optionsVersion}
+                                        {optionsVersion}
                                     </Select>
                                     <span id="no_cat_search" className="form_error" />
                                 </FormControl>
@@ -446,13 +390,13 @@ const Versiontrims = (props) => {
                         {trims && (
                             <Autocomplete
                                 id="select1"
-                                value={valueSelect1}
+                                value={valueSelectTrim}
                                 onChange={(event, newValue) => {
-                                    setValueSelect1(newValue);
+                                    setValueSelectTrim(newValue);
                                 }}
                                 options={trims}
                                 getOptionLabel={(option) => option.trimNormal}
-                                disabled={!currentVersion || activeSelect === 2}
+                                disabled={!currentVersion}
                                 renderInput={(params) => (
                                     <TextField
                                         // eslint-disable-next-line react/jsx-props-no-spreading
@@ -465,48 +409,6 @@ const Versiontrims = (props) => {
                         )}
                     </CardContent>
                     <CardActions>
-                        <Button
-                            onClick={handleUpdateSelect}
-                            variant="contained"
-                            disabled={
-                                trimsToAdd.length === 0 && trimsToDelete.length === 0
-                            }
-                        >
-                            Update
-                        </Button>
-                    </CardActions>
-                </Card>
-                <Card className={classes.cardRoot}>
-                    <CardHeader title="Version change" />
-                    <CardContent className={classes.cardContent}>
-                        {trims && (
-                            <Autocomplete
-                                id="select2"
-                                value={valueSelect2}
-                                onChange={(event, newValue) => {
-                                    setValueSelect2(newValue);
-                                }}
-                                options={trims}
-                                getOptionLabel={(option) => option.trimNormal}
-                                disabled={!currentVersion || activeSelect === 1}
-                                renderInput={(params) => (
-                                    <TextField
-                                        // eslint-disable-next-line react/jsx-props-no-spreading
-                                        {...params}
-                                        label="Select trim"
-                                        variant="outlined"
-                                    />
-                                )}
-                            />
-                        )}
-                    </CardContent>
-                    <CardActions>
-                        <Button onClick={handleAddTrims} variant="contained">
-                            Add
-                        </Button>
-                        <Button onClick={handleDeleteTrims} variant="contained">
-                            Delete
-                        </Button>
                         <Button
                             onClick={handleUpdateSelect}
                             variant="contained"
@@ -544,7 +446,7 @@ const Versiontrims = (props) => {
                         {trimsToAdd.length > 0 && (
                             <List>
                                 {trimsToAdd.map((trim) => (
-                                    <ListItem key={trim.id}>
+                                    <ListItem key={trim.id} className={classes.trimItem}>
                                         <div className={classes.trimRemove}>
                                             <p>{trim.trim}</p>
                                             <Close
@@ -606,7 +508,7 @@ const Versiontrims = (props) => {
     );
 };
 
-Versiontrims.propTypes = {
+VersiontrimsComparison.propTypes = {
     brands: PropTypes.array.isRequired,
 };
 
@@ -632,7 +534,7 @@ function mapDispatchToProps(dispatch) {
     );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Versiontrims);
+export default connect(mapStateToProps, mapDispatchToProps)(VersiontrimsComparison);
 
 export async function getServerSideProps() {
     const brands = await getBrandsModels();

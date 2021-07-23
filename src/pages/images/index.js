@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import MUIDataTable from 'mui-datatables';
 import { Button, AppBar, Toolbar } from '@material-ui/core';
 import { makeStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { Check, Close } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 import { apiQl } from 'lib/functions';
 import Breadcrumb from 'components/std/breadcrumb';
 import Link from 'components/std/link';
-import { showtime } from 'tools/functions';
 
 const getMuiTheme = () =>
     createMuiTheme({
@@ -79,21 +79,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Prices = ({ prices }) => {
+const Images = ({ images }) => {
     const classes = useStyles();
-    const [allPrices, setAllPrices] = useState(null);
+    const [allImages, setAllImages] = useState(null);
     useEffect(() => {
-        if (prices) {
+        if (images) {
             const data = [];
-            prices.edges.map((price) =>
+            images.map((image) =>
                 data.push({
-                    id: price.node.id,
-                    model: price.node.version.model.model,
-                    version: price.node.version.id,
-                    price: price.node.price,
-                    promo: price.node.promo || '-',
-                    createdAt: price.node.createdAt,
-                    edit: price.node._id,
+                    id: image.id,
+                    model: image.model.model,
+                    modelYear: image.model.modelYear,
+                    isFeatured: image.isFeatured,
+                    filename: image.filename,
+                    edit: image._id,
                 }),
             );
 
@@ -105,44 +104,26 @@ const Prices = ({ prices }) => {
                     name: 'model',
                 },
                 {
-                    name: 'version',
+                    name: 'modelYear',
                 },
                 {
-                    name: 'price',
-                },
-                {
-                    name: 'promo',
-                },
-                {
-                    name: 'createdAt',
+                    name: 'isFeatured',
                     options: {
                         customBodyRender: (value) => {
-                            return showtime(value);
+                            return value ? <Check /> : <Close />;
                         },
                     },
                 },
                 {
-                    name: 'edit',
-                    label: ' ',
-                    options: {
-                        customBodyRender: (value) => {
-                            return (
-                                <Link href={`/prices/edit/${value}`}>
-                                    <Button variant="outlined" size="small">
-                                        Edit
-                                    </Button>
-                                </Link>
-                            );
-                        },
-                    },
+                    name: 'filename',
                 },
             ];
-            setAllPrices({
+            setAllImages({
                 data,
                 columns,
             });
         }
-    }, [prices]);
+    }, [images]);
 
     const options = {
         sort: true,
@@ -165,23 +146,23 @@ const Prices = ({ prices }) => {
                 links={[
                     {
                         href: null,
-                        text: 'prices',
+                        text: 'images',
                     },
                 ]}
             />
             <AppBar position="static" className={classes.barRoot}>
                 <Toolbar variant="dense">
-                    <Link href="/prices/create">
+                    <Link href="/images/create">
                         <Button color="inherit">Create</Button>
                     </Link>
                 </Toolbar>
             </AppBar>
             <div>
-                {allPrices && (
+                {allImages && (
                     <MuiThemeProvider theme={getMuiTheme()}>
                         <MUIDataTable
-                            data={allPrices.data}
-                            columns={allPrices.columns}
+                            data={allImages.data}
+                            columns={allImages.columns}
                             options={options}
                         />
                     </MuiThemeProvider>
@@ -191,34 +172,22 @@ const Prices = ({ prices }) => {
     );
 };
 
-Prices.propTypes = {
-    prices: PropTypes.object.isRequired,
+Images.propTypes = {
+    images: PropTypes.array.isRequired,
 };
 
-export default Prices;
+export default Images;
 
-const queryQl = `query getPrices {
-    prices(
-        first:100000,
-        after: null
-        version_isActive: true
-        version_model_isActive: true
-        _order: {version_id: "ASC", createdAt: "DESC"}
-    ){
-		edges{
-            node{
-                id
-                _id
-                version {
-                    id
-                    model {
-                        model
-                    }
-                }
-                price
-                promo
-                createdAt
-            }
+const queryQl = `query getImages{
+    images{
+        id
+        _id
+        filename
+        isFeatured
+    	model {
+            id
+            model
+            modelYear
         }
     }
 }
@@ -228,7 +197,7 @@ export async function getServerSideProps() {
     const data = await apiQl(queryQl, null, false);
     return {
         props: {
-            prices: data.data.prices,
+            images: data.data.images,
         },
     };
 }

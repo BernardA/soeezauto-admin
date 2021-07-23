@@ -8,6 +8,10 @@ import {
     POST_MODEL_OK,
     POST_MODEL_ERROR,
     SET_POST_MODEL_TO_NULL,
+    GET_MODEL_INIT,
+    GET_MODEL_OK,
+    GET_MODEL_ERROR,
+    SET_GET_MODEL_TO_NULL,
 } from 'store/actions';
 
 const initialState = {
@@ -15,6 +19,8 @@ const initialState = {
     errorPutModel: null,
     dataPostModel: null,
     errorPostModel: null,
+    dataGetModel: null,
+    errorGetModel: null,
     isLoading: false,
 };
 
@@ -73,6 +79,31 @@ const model = (state = initialState, action) => {
                 ...state,
                 dataPostModel: null,
                 errorPostModel: null,
+            };
+        case GET_MODEL_INIT:
+            return {
+                ...state,
+                dataGetModel: null,
+                errorGetModel: null,
+                isLoading: true,
+            };
+        case GET_MODEL_OK:
+            return {
+                ...state,
+                dataGetModel: action.data,
+                isLoading: false,
+            };
+        case GET_MODEL_ERROR:
+            return {
+                ...state,
+                errorGetModel: action.data,
+                isLoading: false,
+            };
+        case SET_GET_MODEL_TO_NULL:
+            return {
+                ...state,
+                dataGetModel: null,
+                errorGetModel: null,
             };
         default:
             return state;

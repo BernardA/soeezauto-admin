@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { Card, CardContent, AppBar, Toolbar, Button, MenuItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { maxLength, minLength } from 'tools/validator';
+import { maxLength } from 'tools/validator';
 import Loading from 'components/std/loading';
 import NotifierDialog from 'components/std/notifierDialog';
 import { renderInput, renderSwitch } from 'components/formInputs/formInputs';
@@ -21,7 +21,6 @@ import RenderSelect from 'components/formInputs/formInputRenderSelect';
 import { BODY_TYPES, GEARBOXES, DOORS, PLACES, TRACTIONS } from 'parameters';
 
 const maxLength50 = maxLength(50);
-const minLength5 = minLength(5);
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -186,7 +185,7 @@ const VersionEdit = (props) => {
                                 label="Version"
                                 variant="outlined"
                                 component={renderInput}
-                                validate={[minLength5, maxLength50]}
+                                validate={[maxLength50]}
                                 placeholder={version.version}
                                 autoFocus
                             />
@@ -435,15 +434,14 @@ const queryQl = `query getVersion(
             tyre
         }
         prices(
-            _order: {updatedAt: "DESC"}
+            _order: {createdAt: "DESC"}
         ) {
             edges {
                 node {
                     id
-                    updatedAt
+                    createdAt
                     price
                     promo
-                    isActive
                 }
             }
         }

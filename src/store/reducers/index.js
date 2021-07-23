@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import auth from './auth';
 import brand from './brand';
+import image from './image';
 import measure from './measure';
 import model from './model';
 import motor from './motor';
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
     form: formReducer,
     auth,
     brand,
+    image,
     measure,
     model,
     motor,

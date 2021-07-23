@@ -25,7 +25,7 @@ NextComposed.propTypes = {
 
 // A styled version of the Next.js Link component:
 // https://github.com/mui-org/material-ui/blob/master/examples/nextjs/src/Link.js
-function Link(props) {
+const Link = (props) => {
     const {
         href,
         activeClassName = 'activeNav',
@@ -56,7 +56,7 @@ function Link(props) {
             {...other}
         />
     );
-}
+};
 
 Link.propTypes = {
     activeClassName: PropTypes.string,

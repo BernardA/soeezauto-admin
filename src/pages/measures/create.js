@@ -95,7 +95,7 @@ const MeasureCreate = (props) => {
             fuelTank: formValues.fuelTank ? parseInt(formValues.fuelTank, 10) : undefined,
             width: parseInt(formValues.width, 10),
             height: parseInt(formValues.height, 10),
-            length: parseInt(formValues.height, 10),
+            length: parseInt(formValues.length, 10),
             wheelbase: parseInt(formValues.wheelbase, 10),
             trunk: parseInt(formValues.trunk, 10),
             trunkMax: formValues.trunkMax ? parseInt(formValues.trunkMax, 10) : undefined,

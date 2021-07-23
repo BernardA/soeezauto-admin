@@ -134,6 +134,7 @@ function* putVersion(action) {
         $id: ID!
         $model: String
         $version: String
+        $isActive: Boolean
         $motor: String
         $measures: String
         $performance: String
@@ -153,6 +154,7 @@ function* putVersion(action) {
                     id: $id
                     model: $model
                     version: $version
+                    isActive: $isActive
                     motor: $motor
                     measures: $measures
                     performance: $performance
@@ -179,6 +181,7 @@ function* putVersion(action) {
         id: action.values.id,
         model: action.values.model,
         version: action.values.version,
+        isActive: action.values.isActive,
         motor: action.values.motorId,
         measures: action.values.measureId,
         performance: action.values.performanceId,

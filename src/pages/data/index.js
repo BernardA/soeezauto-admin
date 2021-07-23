@@ -60,6 +60,16 @@ const useStyles = makeStyles({
         width: 300,
         margin: '0 auto',
     },
+    select: {
+        marginTop: 20,
+    },
+    submit: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        '& button': {
+            marginTop: 20,
+        },
+    },
 });
 
 const Data = ({ brands }) => {
@@ -216,7 +226,7 @@ const Data = ({ brands }) => {
                             label="Current date"
                             onChange={handleCurrentDateChange}
                         />
-                        <FormControl variant="outlined">
+                        <FormControl className={classes.select} variant="outlined">
                             <InputLabel id="brand-select-label">
                                 Choisir marque
                             </InputLabel>
@@ -233,7 +243,7 @@ const Data = ({ brands }) => {
                             </Select>
                             <span id="no_cat_search" className="form_error" />
                         </FormControl>
-                        <FormControl variant="outlined">
+                        <FormControl className={classes.select} variant="outlined">
                             <InputLabel id="action-select-label">
                                 Select action
                             </InputLabel>
@@ -250,7 +260,11 @@ const Data = ({ brands }) => {
                             </Select>
                             <span id="no_cat_search" className="form_error" />
                         </FormControl>
-                        <Button type="submit">Submit</Button>
+                        <div className={classes.submit}>
+                            <Button variant="contained" type="submit">
+                                Submit
+                            </Button>
+                        </div>
                     </form>
                 </CardContent>
             </Card>

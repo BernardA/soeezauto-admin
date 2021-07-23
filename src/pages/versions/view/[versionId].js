@@ -311,7 +311,7 @@ const VersionView = (props) => {
                                                 <TableCell>{price.node.price}</TableCell>
                                                 <TableCell>{price.node.promo}</TableCell>
                                                 <TableCell>
-                                                    {showtime(price.node.updatedAt)}
+                                                    {showtime(price.node.createdAt)}
                                                 </TableCell>
                                             </TableRow>
                                         ))}
@@ -368,15 +368,14 @@ const queryQl = `query getVersion(
         prices(
             first: 100
             after: null
-            _order: {updatedAt: "DESC"}
+            _order: {createdAt: "DESC"}
         ) {
             edges {
                 node {
                     id
-                    updatedAt
+                    createdAt
                     price
                     promo
-                    isActive
                 }
             }
         }

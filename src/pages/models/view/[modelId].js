@@ -99,6 +99,8 @@ const ModelView = (props) => {
                     id: version.id,
                     version: version.version,
                     isActive: version.isActive,
+                    price: version.prices.edges[0].node.price,
+                    promo: version.prices.edges[0].node.promo || 'n/a',
                 }),
             );
 
@@ -117,6 +119,12 @@ const ModelView = (props) => {
                         },
                     },
                 },
+                {
+                    name: 'price',
+                },
+                {
+                    name: 'promo',
+                },
             ];
             setVersionView({
                 data,
@@ -124,7 +132,6 @@ const ModelView = (props) => {
             });
         }
     }, [model]);
-
     const options = {
         sort: true,
         viewColumns: true,
@@ -166,6 +173,12 @@ const ModelView = (props) => {
                     <CardContent className={classes.cardContent}>
                         <div>
                             <FormControl>
+                                <Typography component="span">Model</Typography>
+                                <Typography variant="body2">{model.model}</Typography>
+                            </FormControl>
+                        </div>
+                        <div>
+                            <FormControl>
                                 <Typography component="span">Id</Typography>
                                 <Typography variant="body2">{model.id}</Typography>
                             </FormControl>
@@ -173,7 +186,23 @@ const ModelView = (props) => {
                         <div>
                             <FormControl>
                                 <Typography component="span">Brand</Typography>
-                                <Typography variant="body2">{model.model}</Typography>
+                                <Typography variant="body2">
+                                    {model.brand.brand}
+                                </Typography>
+                            </FormControl>
+                        </div>
+                        <div>
+                            <FormControl>
+                                <Typography component="span">Brand id</Typography>
+                                <Typography variant="body2">{model.brand.id}</Typography>
+                            </FormControl>
+                        </div>
+                        <div>
+                            <FormControl>
+                                <Typography component="span">Segment</Typography>
+                                <Typography variant="body2">
+                                    {model.segment.segment}
+                                </Typography>
                             </FormControl>
                         </div>
                         <div>
@@ -219,6 +248,7 @@ const queryQl = `query getModel(
         _id
     	model
     	modelYear
+        isActive
     	images {
             filename
         }
@@ -234,6 +264,20 @@ const queryQl = `query getModel(
             id
             version
             isActive
+            prices (
+                first: 1
+                after: null
+                _order: { createdAt: "DESC"}
+            ) {
+                edges {
+                    node {
+                        id
+                        price
+                        promo
+                        createdAt
+                    }
+                }
+            }
         }
     }
 }`;

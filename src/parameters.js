@@ -8,6 +8,8 @@ export const COOKIE_MAX_AGE = 2592000; // 30 days
 export const COOKIE_MAX_AGE_USER_REMINDERS = 300;
 export const COOKIE_SAME_SITE = 'strict';
 
+export const UPLOAD_MAX_SIZE = 3000000; // bytes
+
 export const TOKEN_TTL = 1800; // seconds
 export const MAX_IDLE_TIME = 1500;
 export const IDLE_TIME_LOGOUT = 60;

@@ -45,6 +45,9 @@ const useStyles = makeStyles({
         '& form div': {
             width: '100%',
         },
+        '& table': {
+            tableLayout: 'initial',
+        },
     },
     selectBrand: {
         height: 80,
@@ -295,24 +298,25 @@ export async function getServerSideProps({ query }) {
     }
     if (result !== 'error') {
         for (let index = 0; index < result.models.length; index++) {
-            if (result.models[index].basePath.includes('pdf')) {
+            if (
+                result.models[index]?.basePath?.includes('pdf') ||
+                result.models[index]?.currPath?.includes('pdf')
+            ) {
                 let base = null;
                 if (result.models[index].basePath) {
                     base = await getPdf(result.models[index].basePath);
+                    delete base.metadata;
                 }
                 let curr = null;
                 if (result.models[index].currPath) {
                     curr = await getPdf(result.models[index].currPath);
+                    delete curr.metadata;
                 }
                 result.models[index].textBaseJs = base;
                 result.models[index].textCurrJs = curr;
-            } else {
-                result.models[index].textBaseJs = null;
-                result.models[index].textCurrJs = null;
             }
         }
     }
-
     return {
         props: {
             result,

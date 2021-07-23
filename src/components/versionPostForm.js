@@ -26,7 +26,7 @@ const VersionPostForm = (props) => {
         models.forEach((model) => {
             options.push(
                 <MenuItem value={model.id} key={model.id}>
-                    {model.model}
+                    {`${model.model} - ${model.modelYear}`}
                 </MenuItem>,
             );
         });
@@ -183,7 +183,6 @@ const VersionPostForm = (props) => {
                     label="GVW"
                     variant="outlined"
                     component={renderInput}
-                    validate={[required]}
                 />
             </div>
             <div className="form_input">
@@ -193,7 +192,6 @@ const VersionPostForm = (props) => {
                     label="Curb weight"
                     variant="outlined"
                     component={renderInput}
-                    validate={[required]}
                 />
             </div>
             <div className="form_input form_select">

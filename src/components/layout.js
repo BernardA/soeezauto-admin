@@ -160,6 +160,7 @@ const Layout = (props) => {
                         'Prices',
                         'Trims',
                         'Versiontrims',
+                        'Images',
                         'Data',
                     ].map((text) => (
                         <ListItem button key={text}>

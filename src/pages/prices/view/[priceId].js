@@ -63,6 +63,9 @@ const PriceView = (props) => {
             />
             <AppBar position="static" className={classes.barRoot}>
                 <Toolbar variant="dense">
+                    <Link href="/prices/create">
+                        <Button color="inherit">Create</Button>
+                    </Link>
                     <Link href={`/prices/edit/${price._id}`}>
                         <Button color="inherit">Edit</Button>
                     </Link>
@@ -127,7 +130,7 @@ const PriceView = (props) => {
                             <FormControl>
                                 <Typography component="span">Updated</Typography>
                                 <Typography variant="body2">
-                                    {showtime(price.updatedAt)}
+                                    {showtime(price.createdAt)}
                                 </Typography>
                             </FormControl>
                         </div>
@@ -164,7 +167,7 @@ const queryQl = `query getPrice(
         }
         price
         promo
-        updatedAt
+        createdAt
     }
 }
 `;

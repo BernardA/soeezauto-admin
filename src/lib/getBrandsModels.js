@@ -16,6 +16,7 @@ const queryQl = `query getBrandsModels(
             ){
                 id
                 model
+                modelYear
                 versions(
                     isActive: true
                     _order: {version: "ASC"}

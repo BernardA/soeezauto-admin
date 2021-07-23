@@ -174,6 +174,20 @@ export const PUT_VERSION_TRIMS_ERROR = 'PUT_VERSION_TRIM_ERROR';
 
 export const SET_PUT_VERSION_TRIMS_TO_NULL = 'SET_PUT_VERSION_TRIMS_TO_NULL';
 
+export const POST_IMAGE = 'POST_IMAGE';
+export const POST_IMAGE_INIT = 'POST_IMAGE_INIT';
+export const POST_IMAGE_OK = 'POST_IMAGE_OK';
+export const POST_IMAGE_ERROR = 'POST_IMAGE_ERROR';
+
+export const SET_POST_IMAGE_TO_NULL = 'SET_POST_IMAGE_TO_NULL';
+
+export const GET_MODEL = 'GET_MODEL';
+export const GET_MODEL_INIT = 'GET_MODEL_INIT';
+export const GET_MODEL_OK = 'GET_MODEL_OK';
+export const GET_MODEL_ERROR = 'GET_MODEL_ERROR';
+
+export const SET_GET_MODEL_TO_NULL = 'SET_GET_MODEL_TO_NULL';
+
 export function actionPostLogin(values) {
     return {
         type: POST_LOGIN,
@@ -482,5 +496,31 @@ export function actionPutVersionTrims(values) {
 export function actionSetPutVersionTrimsToNull() {
     return {
         type: SET_PUT_VERSION_TRIMS_TO_NULL,
+    };
+}
+
+export function actionPostImage(values) {
+    return {
+        type: POST_IMAGE,
+        values,
+    };
+}
+
+export function actionSetPostImageToNull() {
+    return {
+        type: SET_POST_IMAGE_TO_NULL,
+    };
+}
+
+export function actionGetModel(modelId) {
+    return {
+        type: GET_MODEL,
+        modelId,
+    };
+}
+
+export function actionSetGetModelToNull() {
+    return {
+        type: SET_GET_MODEL_TO_NULL,
     };
 }
