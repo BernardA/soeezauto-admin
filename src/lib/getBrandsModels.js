@@ -9,6 +9,7 @@ const queryQl = `query getBrandsModels(
         _order: {brand: "ASC"}
         ) {
 		    id
+            _id
 		    brand
             models(
                 isActive: $isActiveModel

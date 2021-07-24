@@ -188,6 +188,13 @@ export const GET_MODEL_ERROR = 'GET_MODEL_ERROR';
 
 export const SET_GET_MODEL_TO_NULL = 'SET_GET_MODEL_TO_NULL';
 
+export const POST_SPEC = 'POST_SPEC';
+export const POST_SPEC_INIT = 'POST_SPEC_INIT';
+export const POST_SPEC_OK = 'POST_SPEC_OK';
+export const POST_SPEC_ERROR = 'POST_SPEC_ERROR';
+
+export const SET_POST_SPEC_TO_NULL = 'SET_POST_SPEC_TO_NULL';
+
 export function actionPostLogin(values) {
     return {
         type: POST_LOGIN,
@@ -522,5 +529,18 @@ export function actionGetModel(modelId) {
 export function actionSetGetModelToNull() {
     return {
         type: SET_GET_MODEL_TO_NULL,
+    };
+}
+
+export function actionPostSpec(values) {
+    return {
+        type: POST_SPEC,
+        values,
+    };
+}
+
+export function actionSetPostSpecToNull() {
+    return {
+        type: SET_POST_SPEC_TO_NULL,
     };
 }

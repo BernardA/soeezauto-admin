@@ -161,6 +161,7 @@ const Layout = (props) => {
                         'Trims',
                         'Versiontrims',
                         'Images',
+                        'Specs',
                         'Data',
                     ].map((text) => (
                         <ListItem button key={text}>

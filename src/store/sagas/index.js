@@ -9,6 +9,7 @@ import password from './password';
 import performance from './performance';
 import price from './price';
 import version from './version';
+import spec from './spec';
 import system from './system';
 import trim from './trim';
 
@@ -24,6 +25,7 @@ export default function* rootSaga() {
         performance(),
         price(),
         version(),
+        spec(),
         system(),
         trim(),
     ]);
