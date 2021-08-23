@@ -10,8 +10,8 @@ export const COOKIE_SAME_SITE = 'strict';
 
 export const UPLOAD_MAX_SIZE = 3000000; // bytes
 
-export const TOKEN_TTL = 1800; // seconds
-export const MAX_IDLE_TIME = 1500;
+export const TOKEN_TTL = 3600; // seconds
+export const MAX_IDLE_TIME = 3500;
 export const IDLE_TIME_LOGOUT = 60;
 
 export const REVALIDATE_INTERVAL = 3600; // how ofter to refresh data from API

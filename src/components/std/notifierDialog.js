@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Button,
     Dialog,
@@ -7,12 +7,43 @@ import {
     Typography,
 } from '@material-ui/core/';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import styles from 'styles/notifierDialog';
 
-const DialogTitle = withStyles(styles)((props) => {
-    const { children, classes } = props;
+const useStyles = makeStyles(() => ({
+    paperFullWidth: {
+        margin: 0,
+        width: '100%',
+    },
+    title: {
+        backgroundColor: '#de1b',
+        padding: '0 24px',
+    },
+    h6: {
+        lineHeight: '40px',
+    },
+    content: {
+        borderBottom: '1px solid #ccc',
+        minHeight: '50px',
+        '& div': {
+            marginTop: '20px',
+        },
+    },
+    buttonLeft: {
+        marginLeft: '10px',
+    },
+    actions: {
+        minHeight: '50px',
+        '& h4': {
+            width: '100%',
+            textAlign: 'center',
+        },
+    },
+}));
+
+const DialogTitle = (props) => {
+    const { children } = props;
+    const classes = useStyles();
     return (
         <MuiDialogTitle disableTypography className={classes.title}>
             <Typography variant="h6" className={classes.h6}>
@@ -20,18 +51,16 @@ const DialogTitle = withStyles(styles)((props) => {
             </Typography>
         </MuiDialogTitle>
     );
-});
+};
 
-class NotifierDialog extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            open: true,
-        };
-    }
+const NotifierDialog = (props) => {
+    const { notification, handleNotificationDismiss, handleSessionWarning } = props;
+    const classes = useStyles();
 
-    errors = () => {
-        const errors = this.props.notification.errors;
+    const [open] = useState(true);
+
+    const showErrors = () => {
+        const errors = notification.errors;
         console.log('errors', errors);
         if (errors && errors.length > 0) {
             const output = errors.map((error) => {
@@ -43,14 +72,13 @@ class NotifierDialog extends React.Component {
         return null;
     };
 
-    actions = () => {
-        const { classes } = this.props;
-        switch (this.props.notification.status) {
+    const actions = () => {
+        switch (notification.status) {
             case 'ok_and_dismiss':
                 return (
                     <Button
                         id="dismiss_notification"
-                        onClick={this.props.handleNotificationDismiss}
+                        onClick={handleNotificationDismiss}
                         color="primary"
                         autoFocus
                     >
@@ -61,7 +89,7 @@ class NotifierDialog extends React.Component {
                 return (
                     <Button
                         id="dismiss_notification"
-                        onClick={this.props.handleNotificationDismiss}
+                        onClick={handleNotificationDismiss}
                         color="primary"
                         autoFocus
                     >
@@ -73,7 +101,7 @@ class NotifierDialog extends React.Component {
                     <>
                         <Button
                             id="session_expire"
-                            onClick={this.props.handleSessionWarning}
+                            onClick={handleSessionWarning}
                             color="primary"
                         >
                             Terminer session
@@ -81,7 +109,7 @@ class NotifierDialog extends React.Component {
                         <Button
                             id="session_extend"
                             className={classes.buttonLeft}
-                            onClick={this.props.handleSessionWarning}
+                            onClick={handleSessionWarning}
                             color="primary"
                             autoFocus
                         >
@@ -93,7 +121,7 @@ class NotifierDialog extends React.Component {
                 return (
                     <Button
                         id="session_logout"
-                        onClick={this.props.handleSessionWarning}
+                        onClick={handleSessionWarning}
                         color="primary"
                         autoFocus
                     >
@@ -108,7 +136,7 @@ class NotifierDialog extends React.Component {
                             className={classes.buttonLeft}
                             variant="outlined"
                             color="primary"
-                            onClick={this.props.handleNotificationDismiss}
+                            onClick={handleNotificationDismiss}
                         >
                             Annuler
                         </Button>
@@ -116,49 +144,47 @@ class NotifierDialog extends React.Component {
                             id="confirmed"
                             variant="outlined"
                             color="primary"
-                            onClick={this.props.handleNotificationDismiss}
+                            onClick={handleNotificationDismiss}
                         >
                             Confirmer
                         </Button>
                     </>
                 );
             case 'redirect':
-                // TODO
-                return null;
+                return (
+                    <Button
+                        id="dismiss_notification"
+                        onClick={handleNotificationDismiss}
+                        color="primary"
+                        autoFocus
+                    >
+                        Fermer
+                    </Button>
+                );
             default:
                 return null;
         }
     };
 
-    render() {
-        const { classes } = this.props;
-        if (this.props.notification.status !== '') {
-            return (
-                <Dialog
-                    className={classes.paperFullWidth}
-                    open={this.state.open}
-                    fullWidth
-                >
-                    <DialogTitle>{this.props.notification.title}</DialogTitle>
-                    <DialogContent className={classes.content}>
-                        <div>{this.props.notification.message}</div>
-                        {this.errors()}
-                    </DialogContent>
-                    <DialogActions className={classes.actions}>
-                        {this.actions()}
-                    </DialogActions>
-                </Dialog>
-            );
-        }
-        return null;
+    if (notification.status !== '') {
+        return (
+            <Dialog className={classes.paperFullWidth} open={open} fullWidth>
+                <DialogTitle>{notification.title}</DialogTitle>
+                <DialogContent className={classes.content}>
+                    <div>{notification.message}</div>
+                    {showErrors()}
+                </DialogContent>
+                <DialogActions className={classes.actions}>{actions()}</DialogActions>
+            </Dialog>
+        );
     }
-}
+    return null;
+};
 
 NotifierDialog.propTypes = {
     notification: PropTypes.object.isRequired,
     handleNotificationDismiss: PropTypes.func,
     handleSessionWarning: PropTypes.func,
-    classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(NotifierDialog);
+export default React.memo(NotifierDialog);

@@ -214,8 +214,8 @@ const VersiontrimCopy = (props) => {
             />
             <AppBar position="static" className={classes.barRoot}>
                 <Toolbar variant="dense">
-                    <Link href="/prices/create">
-                        <Button color="inherit">Create</Button>
+                    <Link href="/versiontrims">
+                        <Button color="inherit">Versiontrims</Button>
                     </Link>
                 </Toolbar>
             </AppBar>

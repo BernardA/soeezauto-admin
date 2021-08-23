@@ -1,5 +1,7 @@
 /* eslint-disable react/display-name */
 import React, { useEffect, useState } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import MUIDataTable from 'mui-datatables';
 import { Button, AppBar, Toolbar } from '@material-ui/core';
 import { makeStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
@@ -8,6 +10,10 @@ import PropTypes from 'prop-types';
 import { apiQl } from 'lib/functions';
 import Breadcrumb from 'components/std/breadcrumb';
 import Link from 'components/std/link';
+import ToggleActive from 'components/versionToggleActive';
+import Loading from 'components/std/loading';
+import NotifierDialog from 'components/std/notifierDialog';
+import { actionSetPutVersionToNull } from 'store/actions';
 
 const getMuiTheme = () =>
     createMuiTheme({
@@ -79,9 +85,17 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Versions = ({ versions }) => {
+const Versions = (props) => {
+    const { versions, dataPutVersion, errorPutVersion, isLoading } = props;
     const classes = useStyles();
     const [allVersions, setAllVersions] = useState(null);
+    const [notification, setNotification] = useState({
+        status: '',
+        title: '',
+        message: '',
+        errors: {},
+    });
+
     useEffect(() => {
         if (versions) {
             const data = [];
@@ -91,6 +105,7 @@ const Versions = ({ versions }) => {
                     model: version.model.model,
                     version: version.version,
                     isActive: version.isActive,
+                    toggleActive: version.id,
                     edit: version._id,
                     view: version._id,
                 }),
@@ -111,6 +126,19 @@ const Versions = ({ versions }) => {
                     options: {
                         customBodyRender: (value) => {
                             return value ? <Check /> : <Close />;
+                        },
+                    },
+                },
+                {
+                    name: 'toggleActive',
+                    options: {
+                        customBodyRender: (value, tableMeta) => {
+                            return (
+                                <ToggleActive
+                                    versionId={value}
+                                    initialActive={tableMeta.rowData[3]}
+                                />
+                            );
                         },
                     },
                 },
@@ -167,6 +195,35 @@ const Versions = ({ versions }) => {
         selectableRowsHeader: false,
     };
 
+    useEffect(() => {
+        if (dataPutVersion) {
+            setNotification({
+                status: 'ok_and_dismiss',
+                title: 'Success',
+                message: 'Version active toggled',
+                errors: {},
+            });
+        }
+        if (errorPutVersion) {
+            setNotification({
+                status: 'error',
+                title: 'Error',
+                message: 'View errors',
+                errors: errorPutVersion,
+            });
+        }
+    }, [dataPutVersion, errorPutVersion]);
+
+    const handleNotificationDismiss = () => {
+        setNotification({
+            status: '',
+            title: '',
+            message: '',
+            errors: {},
+        });
+        props.actionSetPutVersionToNull();
+    };
+
     return (
         <>
             <Breadcrumb
@@ -177,6 +234,7 @@ const Versions = ({ versions }) => {
                     },
                 ]}
             />
+            {isLoading && <Loading />}
             <AppBar position="static" className={classes.barRoot}>
                 <Toolbar variant="dense">
                     <p />
@@ -196,15 +254,40 @@ const Versions = ({ versions }) => {
                     </MuiThemeProvider>
                 )}
             </div>
+            <NotifierDialog
+                notification={notification}
+                handleNotificationDismiss={handleNotificationDismiss}
+            />
         </>
     );
 };
 
 Versions.propTypes = {
     versions: PropTypes.array.isRequired,
+    actionSetPutVersionToNull: PropTypes.func.isRequired,
+    dataPutVersion: PropTypes.any,
+    errorPutVersion: PropTypes.any,
+    isLoading: PropTypes.bool.isRequired,
 };
 
-export default Versions;
+const mapStateToProps = (state) => {
+    return {
+        dataPutVersion: state.version.dataPutVersion,
+        errorPutVersion: state.version.errorPutVersion,
+        isLoading: state.version.isLoading,
+    };
+};
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(
+        {
+            actionSetPutVersionToNull,
+        },
+        dispatch,
+    );
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Versions);
 
 const queryQl = `query getVersions {
     versions {

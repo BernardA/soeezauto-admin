@@ -181,6 +181,13 @@ export const POST_IMAGE_ERROR = 'POST_IMAGE_ERROR';
 
 export const SET_POST_IMAGE_TO_NULL = 'SET_POST_IMAGE_TO_NULL';
 
+export const PUT_IMAGE = 'PUT_IMAGE';
+export const PUT_IMAGE_INIT = 'PUT_IMAGE_INIT';
+export const PUT_IMAGE_OK = 'PUT_IMAGE_OK';
+export const PUT_IMAGE_ERROR = 'PUT_IMAGE_ERROR';
+
+export const SET_PUT_IMAGE_TO_NULL = 'SET_PUT_IMAGE_TO_NULL';
+
 export const GET_MODEL = 'GET_MODEL';
 export const GET_MODEL_INIT = 'GET_MODEL_INIT';
 export const GET_MODEL_OK = 'GET_MODEL_OK';
@@ -516,6 +523,19 @@ export function actionPostImage(values) {
 export function actionSetPostImageToNull() {
     return {
         type: SET_POST_IMAGE_TO_NULL,
+    };
+}
+
+export function actionPutImage(values) {
+    return {
+        type: PUT_IMAGE,
+        values,
+    };
+}
+
+export function actionSetPutImageToNull() {
+    return {
+        type: SET_PUT_IMAGE_TO_NULL,
     };
 }
 

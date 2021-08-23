@@ -137,7 +137,7 @@ const Data = ({ brands }) => {
         setAction(event.target.value);
     };
 
-    const handleFormSubmit = () => {
+    const handleFormSubmit = (event) => {
         event.preventDefault();
         const brand = brands.filter((bra) => {
             return bra.id === brandId;
@@ -173,7 +173,7 @@ const Data = ({ brands }) => {
 
         axios({
             method: 'post',
-            url: `http://localhost/data/${action}`,
+            url: `${process.env.NEXT_PUBLIC_API_HOST}/data/${action}`,
             data: {
                 baseDir: baseDate,
                 currDir: currentDate,

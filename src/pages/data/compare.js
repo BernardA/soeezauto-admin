@@ -119,6 +119,7 @@ const Compare = (props) => {
     if (result === 'error') {
         return <p>{result}</p>;
     }
+
     return (
         <>
             <Breadcrumb
@@ -149,16 +150,6 @@ const Compare = (props) => {
                     <Card key={model.model} className={classes.modelHolder}>
                         <CardHeader title={model.model} />
                         <CardContent className={classes.modelDiff}>
-                            <Card>
-                                <CardHeader title="PHP" />
-                                <CardContent className={classes.cardContent}>
-                                    <ReactDiffViewer
-                                        oldValue={model.textBasePhp || 'no value'}
-                                        newValue={model.textCurrPhp || 'no value'}
-                                        splitView
-                                    />
-                                </CardContent>
-                            </Card>
                             <Card>
                                 <CardHeader title="JS" />
                                 <CardContent className={classes.cardContent}>
@@ -208,18 +199,20 @@ const Compare = (props) => {
                                         <CardContent>
                                             <div className={classes.iframeContainer}>
                                                 {model.basePath ? (
-                                                    <iframe
+                                                    <object
                                                         className={
                                                             classes.responsiveIframe
                                                         }
-                                                        title={model.basePath}
-                                                        // style={{ width: '100%', height: 1500 }}
-                                                        src={`http://localhost/specs/${brandName}/${baseDate.substring(
+                                                        data={`${
+                                                            process.env
+                                                                .NEXT_PUBLIC_API_HOST
+                                                        }/specs/${brandName}/${baseDate.substring(
                                                             0,
                                                             4,
                                                         )}/${baseDate.slice(-2)}/${
                                                             model.model
                                                         }.pdf`}
+                                                        type="application/pdf"
                                                     />
                                                 ) : (
                                                     <p>no pdf available</p>
@@ -231,16 +224,17 @@ const Compare = (props) => {
                                         <CardHeader title="current" />
                                         <CardContent>
                                             <div className={classes.iframeContainer}>
-                                                <iframe
+                                                <object
                                                     className={classes.responsiveIframe}
-                                                    title={model.basePath}
-                                                    // style={{ width: '100%', height: 1500 }}
-                                                    src={`http://localhost/specs/${brandName}/${currentDate.substring(
+                                                    data={`${
+                                                        process.env.NEXT_PUBLIC_API_HOST
+                                                    }/specs/${brandName}/${currentDate.substring(
                                                         0,
                                                         4,
                                                     )}/${currentDate.slice(-2)}/${
                                                         model.model
                                                     }.pdf`}
+                                                    type="application/pdf"
                                                 />
                                             </div>
                                         </CardContent>
@@ -264,7 +258,7 @@ export default Compare;
 const queryAxios = (baseDate, currentDate, brandName) => {
     return axios({
         method: 'post',
-        url: 'http://localhost/data/compare',
+        url: `${process.env.NEXT_PUBLIC_API_HOST}/data/compare`,
         data: {
             baseDir: baseDate,
             currDir: currentDate,

@@ -85,14 +85,14 @@ const Specs = ({ specs }) => {
     useEffect(() => {
         if (specs) {
             const data = [];
-            specs.map((spec) =>
+            specs.edges.map((node) =>
                 data.push({
-                    id: spec.id,
-                    model: spec.model.model,
-                    modelYear: spec.model.modelYear,
-                    filename: spec.filename,
-                    updatedAt: spec.updatedAt,
-                    edit: spec._id,
+                    id: node.node.id,
+                    model: node.node.model.model,
+                    modelYear: node.node.model.modelYear,
+                    filename: node.node.filename,
+                    updatedAt: node.node.updatedAt,
+                    edit: node.node._id,
                 }),
             );
 
@@ -173,22 +173,26 @@ const Specs = ({ specs }) => {
 };
 
 Specs.propTypes = {
-    specs: PropTypes.array.isRequired,
+    specs: PropTypes.object.isRequired,
 };
 
 export default Specs;
 
 const queryQl = `query getSpecs{
     specs{
-        id
-        _id
-        filename
-    	model {
+      edges {
+        node {
             id
-            model
-            modelYear
+        	_id
+        	filename
+            model {
+                id
+                model
+                modelYear
+            }
+            updatedAt
+            }
         }
-        updatedAt
     }
 }
 `;

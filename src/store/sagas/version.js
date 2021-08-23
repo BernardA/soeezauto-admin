@@ -81,6 +81,7 @@ function* postVersion(action) {
         gvw: action.values.gvw,
         curbWeight: action.values.curbWeight,
         tyreFront: action.values.tyreFront,
+        tyreBack: action.values.tyreBack,
         CF: action.values.CF,
     };
     try {
@@ -173,6 +174,12 @@ function* putVersion(action) {
             version{
                 id
                 _id
+                version
+                model {
+                    id
+                    model
+                }
+                isActive
             }
         }
         }`;
@@ -193,6 +200,7 @@ function* putVersion(action) {
         gvw: action.values.gvw,
         curbWeight: action.values.curbWeight,
         tyreFront: action.values.tyreFront,
+        tyreBack: action.values.tyreBack,
         CF: action.values.CF,
     };
     try {

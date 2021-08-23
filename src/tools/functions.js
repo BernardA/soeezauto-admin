@@ -508,3 +508,7 @@ export function getBaseDate(daysBack) {
     firstOfMonth.setDate(firstOfMonth.getDate() - daysBack);
     return `${firstOfMonth.getFullYear()}-${firstOfMonth.getMonth() + 1}-1`;
 }
+
+export function randomId() {
+    return Math.random().toString(36).substr(2, 5);
+}

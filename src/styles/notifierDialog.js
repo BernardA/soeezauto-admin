@@ -1,4 +1,4 @@
-export default {
+const styles = {
     paperFullWidth: {
         margin: 0,
         width: '100%',
@@ -28,3 +28,5 @@ export default {
         },
     },
 };
+
+export default styles;

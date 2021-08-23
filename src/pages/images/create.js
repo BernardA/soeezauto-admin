@@ -22,6 +22,7 @@ import FormSubmit from 'components/formInputs/formSubmit';
 import { actionPostImage, actionSetPostImageToNull } from 'store/actions';
 import Breadcrumb from 'components/std/breadcrumb';
 import { urlWriter } from 'tools/functions';
+import router from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -156,12 +157,16 @@ const ImageCreate = (props) => {
     };
 
     const handleNotificationDismiss = () => {
+        const title = notification.title;
         setNotification({
             status: '',
             title: '',
             message: '',
             errors: {},
         });
+        if (title === 'Success') {
+            router.push(`/images/edit/${model._id}`);
+        }
     };
     if (error) {
         return <div>{error.messageKey}</div>;

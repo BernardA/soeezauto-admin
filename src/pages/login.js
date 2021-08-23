@@ -12,7 +12,6 @@ import { actionPostLogin, actionLogoutInit } from 'store/actions';
 import styles from 'styles/login.module.scss';
 
 const Login = (props) => {
-    console.log('props', props);
     const { isLoading, errorPostLogin, roles, token } = props;
     const router = useRouter();
     const [isAdmin, setIsAdmin] = useState(true);
@@ -23,6 +22,15 @@ const Login = (props) => {
         errors: {},
     });
 
+    const handleNotificationDismiss = () => {
+        setNotification({
+            status: '',
+            title: '',
+            message: '',
+            errors: {},
+        });
+    };
+
     useEffect(() => {
         router.prefetch('/');
     }, []);
@@ -32,45 +40,34 @@ const Login = (props) => {
             const isAdm =
                 roles.includes('ROLE_ADMIN') || roles.includes('ROLE_SUPERADMIN');
             setIsAdmin(isAdm);
-            console.log('isadm', isAdm);
             if (isAdm) {
                 setNotification({
-                    notification: {
-                        status: 'redirect',
-                        title: 'Success',
-                        message: 'redirection',
-                        errors: {},
-                    },
+                    status: 'redirect',
+                    title: 'Success',
+                    message: 'redirection',
+                    errors: {},
                 });
+                // redirect user after timeout for notification
+                setTimeout(() => {
+                    handleNotificationDismiss();
+                    router.push('/');
+                }, 3000);
             } else {
                 props.actionLogoutInit();
             }
         }
         if (errorPostLogin) {
             setNotification({
-                notification: {
-                    status: 'error',
-                    title: 'Error',
-                    message: 'See below',
-                    errors: errorPostLogin,
-                },
+                status: 'error',
+                title: 'Error',
+                message: 'See below',
+                errors: errorPostLogin,
             });
         }
     }, [token, roles, errorPostLogin]);
 
     const onSubmitLogin = () => {
         props.actionPostLogin(props.loginForm.values);
-    };
-
-    const handleNotificationDismiss = () => {
-        setNotification({
-            notification: {
-                status: '',
-                title: '',
-                message: '',
-                errors: {},
-            },
-        });
     };
 
     return (

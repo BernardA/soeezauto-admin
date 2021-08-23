@@ -18,7 +18,7 @@ class LoginForm extends React.Component {
             <form name="login_form" onSubmit={handleSubmit(submitLogin)}>
                 <div className="form_input">
                     <Field
-                        name="username"
+                        name="email"
                         type="email"
                         label="Email"
                         component={renderInput}

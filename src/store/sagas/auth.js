@@ -21,7 +21,7 @@ import {
 } from '../actions';
 
 function* postLogin(action) {
-    const username = action.values.username;
+    const email = action.values.email;
     const password = action.values.password;
     // const _remember_me = action.payload._remember_me;
     const url = '/login_check';
@@ -29,14 +29,7 @@ function* postLogin(action) {
         yield put({
             type: POST_LOGIN_INIT,
         });
-        const data = yield call(
-            api,
-            'post',
-            url,
-            { username, password },
-            API_REST,
-            false,
-        );
+        const data = yield call(api, 'post', url, { email, password }, API_REST, false);
         yield put({
             type: POST_LOGIN_OK,
             data,

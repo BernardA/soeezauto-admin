@@ -10,8 +10,8 @@ import { maxLength, minLength, required } from 'tools/validator';
 import RenderSelect from 'components/formInputs/formInputRenderSelect';
 import { BODY_TYPES, GEARBOXES, DOORS, PLACES, TRACTIONS } from 'parameters';
 
-const maxLength50 = maxLength(50);
-const minLength5 = minLength(5);
+const maxLength28 = maxLength(28);
+const minLength1 = minLength(1);
 
 const VersionPostForm = (props) => {
     const { models, tyres, taxes, handleSubmit, submitting, invalid, pristine, reset } =
@@ -60,7 +60,7 @@ const VersionPostForm = (props) => {
                     label="version"
                     variant="outlined"
                     component={renderInput}
-                    validate={[required, minLength5, maxLength50]}
+                    validate={[required, minLength1, maxLength28]}
                     autoFocus
                 />
             </div>

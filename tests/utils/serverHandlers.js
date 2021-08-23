@@ -3,9 +3,11 @@ import { rest } from 'msw';
 import mockedGetBrands from '../mocks/getBrands_mock';
 
 const handlers = [
-    rest.get('http://localhost/api', (_req, res, ctx) => {
+    rest.get('http://localhost/api/graphql', (_req, res, ctx) => {
         return res(ctx.json(mockedGetBrands));
     }),
 ];
 
-export default handlers;
+// export default handlers;
+// eslint-disable-next-line import/prefer-default-export
+export { handlers };

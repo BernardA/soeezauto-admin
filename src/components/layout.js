@@ -151,7 +151,6 @@ const Layout = (props) => {
                 <List>
                     {[
                         'Brands',
-                        'Segments',
                         'Models',
                         'Versions',
                         'Motors',

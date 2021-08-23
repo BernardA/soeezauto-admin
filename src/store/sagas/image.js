@@ -7,6 +7,10 @@ import {
     POST_IMAGE_INIT,
     POST_IMAGE_OK,
     POST_IMAGE_ERROR,
+    PUT_IMAGE,
+    PUT_IMAGE_INIT,
+    PUT_IMAGE_OK,
+    PUT_IMAGE_ERROR,
 } from 'store/actions';
 import localforage from 'localforage';
 import { apiQl, errorParserGraphql } from '../../lib/functions';
@@ -79,7 +83,79 @@ function* postImage(action) {
     }
 }
 
+function* putImage(action) {
+    const queryQl = `mutation putImage(
+        $id: ID!
+        $filename: String
+        $isFeatured: Boolean
+    )
+    {
+        updateImage(
+            input: {
+                id: $id
+                filename: $filename
+                isFeatured: $isFeatured
+            }
+        ){
+            image {
+                id
+                isFeatured
+            }
+        }
+    }`;
+
+    const variables = {
+        id: action.values.imageId,
+        filename: action.values.filename,
+        isFeatured: action.values.isFeatured,
+    };
+    try {
+        yield put({
+            type: PUT_IMAGE_INIT,
+        });
+        const data = yield call(apiQl, queryQl, variables);
+        if (data.errors) {
+            yield put({
+                type: PUT_IMAGE_ERROR,
+                data: errorParserGraphql(data.errors),
+            });
+            yield put({
+                type: CLIENT_LOG,
+                data: {
+                    message: errorParserGraphql(data.errors),
+                    action: PUT_IMAGE,
+                },
+            });
+        } else {
+            yield put({
+                type: PUT_IMAGE_OK,
+                data: data.data.updateImage,
+            });
+        }
+    } catch (error) {
+        const isOffline = !!(
+            error.response === undefined || error.code === 'ECONNABORTED'
+        );
+        if (error.response.status === 401) {
+            yield put({
+                type: LOGOUT_TOKEN_EXPIRED,
+            });
+        } else if (isOffline) {
+            // check if offline event already fired
+            localforage.getItem('offline-event-fired').then((value) => {
+                if (value === null) {
+                    localforage.setItem('offline-event-fired', true);
+                }
+            });
+            yield put({
+                type: CHECK_ONLINE_STATUS_ERROR,
+                isOnline: false,
+            });
+        }
+    }
+}
+
 // eslint-disable-next-line func-names
 export default function* system() {
-    yield all([takeLatest(POST_IMAGE, postImage)]);
+    yield all([takeLatest(POST_IMAGE, postImage), takeLatest(PUT_IMAGE, putImage)]);
 }
