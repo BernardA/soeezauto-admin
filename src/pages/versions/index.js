@@ -86,6 +86,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Versions = (props) => {
+    console.log('proos', props);
     const { versions, dataPutVersion, errorPutVersion, isLoading } = props;
     const classes = useStyles();
     const [allVersions, setAllVersions] = useState(null);
@@ -255,6 +256,7 @@ const Versions = (props) => {
                 )}
             </div>
             <NotifierDialog
+                data-testid="notification"
                 notification={notification}
                 handleNotificationDismiss={handleNotificationDismiss}
             />

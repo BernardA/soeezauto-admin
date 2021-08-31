@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Switch } from '@material-ui/core';
@@ -9,17 +9,13 @@ import { actionPutVersion } from 'store/actions';
 const VersionToggleActive = (props) => {
     const { versionId, initialActive } = props;
 
-    const [active, setActive] = useState(false);
+    const [active, setActive] = useState(initialActive);
     const [notification, setNotification] = useState({
         status: '',
         title: '',
         message: '',
         errors: {},
     });
-
-    useEffect(() => {
-        setActive(initialActive);
-    }, [initialActive]);
 
     const handleToggleActive = () => {
         setNotification({
@@ -48,7 +44,12 @@ const VersionToggleActive = (props) => {
 
     return (
         <div>
-            <Switch checked={active} onChange={handleToggleActive} color="primary" />
+            <Switch
+                data-testid="switcher"
+                checked={active}
+                onChange={handleToggleActive}
+                color="primary"
+            />
             <NotifierDialog
                 notification={notification}
                 handleNotificationDismiss={handleNotificationDismiss}

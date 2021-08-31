@@ -14,7 +14,7 @@ const bindMiddleware = (middleware) => {
     return applyMiddleware(...arrMiddleware);
 };
 
-const configureStore = ({ req = null }) => {
+export const configureStore = ({ req = null }) => {
     const sagaMiddleware = createSagaMiddleware();
     const store = createStore(rootReducer, bindMiddleware(sagaMiddleware));
     const isServer = typeof window === 'undefined';

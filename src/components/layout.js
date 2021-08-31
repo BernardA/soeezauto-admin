@@ -9,7 +9,6 @@ import {
     AppBar,
     Toolbar,
     List,
-    Typography,
     Divider,
     IconButton,
     ListItem,
@@ -128,9 +127,9 @@ const Layout = (props) => {
                     >
                         <Menu />
                     </IconButton>
-                    <Typography variant="h6" noWrap>
-                        {`Admin ${router.asPath.replace(/\//g, ' ')}`}
-                    </Typography>
+                    <div className="main-title">
+                        <h1>{`Admin ${router.asPath.replace(/\//g, ' ')}`}</h1>
+                    </div>
                 </Toolbar>
             </AppBar>
             <Drawer

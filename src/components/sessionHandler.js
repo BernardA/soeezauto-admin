@@ -193,7 +193,7 @@ class SessionHandler extends React.Component {
             const options = {
                 path: '/',
                 sameSite: COOKIE_SAME_SITE,
-                secure: process.env.NEXT_PUBLIC_CLIENT_HOST.includes('https'),
+                secure: window.location.protocol === 'https',
                 maxAge: COOKIE_MAX_AGE,
             };
             cookies.set('isAdmin', isAdmin, options);

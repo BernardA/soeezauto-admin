@@ -85,7 +85,7 @@ const Brands = ({ brands }) => {
                 },
                 {
                     name: 'edit',
-                    label: ' ',
+                    label: 'edit',
                     options: {
                         customBodyRender: (value) => {
                             return (
@@ -100,7 +100,7 @@ const Brands = ({ brands }) => {
                 },
                 {
                     name: 'view',
-                    label: ' ',
+                    label: 'view',
                     options: {
                         customBodyRender: (value) => {
                             return (

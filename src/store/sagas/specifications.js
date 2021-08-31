@@ -11,7 +11,7 @@ import localforage from 'localforage';
 import { apiStd } from '../../lib/functions';
 
 function* postSpec(action) {
-    const url = `/spec/create/${action.values.brandId}`;
+    const url = `/specifications/create/${action.values.brandId}`;
     /*
     const queryQl = `mutation postSpec(
         $brand: String!

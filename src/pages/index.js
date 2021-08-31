@@ -3,7 +3,7 @@ import { Typography } from '@material-ui/core';
 
 const Admin = () => {
     return (
-        <div>
+        <main>
             <Typography paragraph>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
                 tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus
@@ -32,7 +32,7 @@ const Admin = () => {
                 accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices
                 sagittis orci a.
             </Typography>
-        </div>
+        </main>
     );
 };
 

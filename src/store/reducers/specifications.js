@@ -12,7 +12,7 @@ const initialState = {
     isLoading: false,
 };
 
-const spec = (state = initialState, action) => {
+const specifications = (state = initialState, action) => {
     switch (action.type) {
         case HYDRATE: {
             return {
@@ -50,4 +50,4 @@ const spec = (state = initialState, action) => {
     }
 };
 
-export default spec;
+export default specifications;

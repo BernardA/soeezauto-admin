@@ -141,12 +141,12 @@ const SpecCreate = (props) => {
             <Breadcrumb
                 links={[
                     {
-                        href: '/specs',
-                        text: 'specs',
+                        href: '/specificatons',
+                        text: 'specifications',
                     },
                     {
                         href: null,
-                        text: 'spec create',
+                        text: 'specifications create',
                     },
                 ]}
             />
@@ -215,9 +215,9 @@ SpecCreate.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        dataPostSpec: state.spec.dataPostSpec,
-        errorPostSpec: state.spec.errorPostSpec,
-        isLoading: state.spec.isLoading,
+        dataPostSpec: state.specifications.dataPostSpec,
+        errorPostSpec: state.specifications.errorPostSpec,
+        isLoading: state.specifications.isLoading,
         specPostForm: state.form.SpecPostForm,
     };
 };

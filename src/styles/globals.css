@@ -141,9 +141,9 @@ body {
     cursor: pointer;
 }
 
-.main-title {
+.main-title h1 {
     text-align: center;
-    color: #2d5074;
+    color: #fff;
     padding: 20px 0;
 }
 
