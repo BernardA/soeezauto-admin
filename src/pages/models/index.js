@@ -182,6 +182,9 @@ const Models = ({ models }) => {
                     <Link href="/models/create">
                         <Button color="inherit">Create</Button>
                     </Link>
+                    <Link href="/models/2424">
+                        <Button color="inherit">2424</Button>
+                    </Link>
                 </Toolbar>
             </AppBar>
             <div>

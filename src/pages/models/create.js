@@ -18,7 +18,7 @@ import getSegments from 'lib/getSegments';
 import RenderSelect from 'components/formInputs/formInputRenderSelect';
 
 const maxLength50 = maxLength(50);
-const minLength5 = minLength(5);
+const minLength2 = minLength(2);
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -186,7 +186,7 @@ const ModelCreate = (props) => {
                                 label="model"
                                 variant="outlined"
                                 component={renderInput}
-                                validate={[required, minLength5, maxLength50]}
+                                validate={[required, minLength2, maxLength50]}
                                 autoFocus
                             />
                         </div>

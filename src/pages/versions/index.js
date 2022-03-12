@@ -86,7 +86,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Versions = (props) => {
-    console.log('proos', props);
     const { versions, dataPutVersion, errorPutVersion, isLoading } = props;
     const classes = useStyles();
     const [allVersions, setAllVersions] = useState(null);
@@ -305,7 +304,11 @@ const queryQl = `query getVersions {
 }
 `;
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+    context.res.setHeader(
+        'Cache-Control',
+        'public, s-maxage=10, stale-while-revalidate=300',
+    );
     const data = await apiQl(queryQl, null, false);
     return {
         props: {

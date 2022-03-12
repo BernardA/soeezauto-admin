@@ -278,7 +278,11 @@ const Data = ({ brands }) => {
 
 export default Data;
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+    context.res.setHeader(
+        'Cache-Control',
+        'public, s-maxage=10, stale-while-revalidate=300',
+    );
     const brands = await getBrands();
     return {
         props: {

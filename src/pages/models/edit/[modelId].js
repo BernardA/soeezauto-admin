@@ -20,7 +20,7 @@ import { apiQl } from 'lib/functions';
 import RenderSelect from 'components/formInputs/formInputRenderSelect';
 
 const maxLength50 = maxLength(50);
-const minLength5 = minLength(5);
+const minLength2 = minLength(2);
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -201,7 +201,7 @@ const ModelEdit = (props) => {
                                 label="model"
                                 variant="outlined"
                                 component={renderInput}
-                                validate={[minLength5, maxLength50]}
+                                validate={[minLength2, maxLength50]}
                                 placeholder={model.model}
                                 autoFocus
                             />

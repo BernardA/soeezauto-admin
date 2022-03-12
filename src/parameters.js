@@ -9,6 +9,7 @@ export const COOKIE_MAX_AGE_USER_REMINDERS = 300;
 export const COOKIE_SAME_SITE = 'strict';
 
 export const UPLOAD_MAX_SIZE = 3000000; // bytes
+export const MODEL_IMAGE_ACCEPTED_MIME_TYPES = ['image/jpeg'];
 
 export const TOKEN_TTL = 3600; // seconds
 export const MAX_IDLE_TIME = 3500;
@@ -49,7 +50,18 @@ export const CONVERSION_FUEL = {
     electric: 'ele',
 };
 
-export const AUTOMATIC_GEARBOXES = ['a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'a10', 'cvt'];
+export const AUTOMATIC_GEARBOXES = [
+    'a1',
+    'a2',
+    'a4',
+    'a5',
+    'a6',
+    'a7',
+    'a8',
+    'a9',
+    'a10',
+    'cvt',
+];
 
 export const TRIMS_AIR_COND_AUTO = [
     '/api/trims/37',

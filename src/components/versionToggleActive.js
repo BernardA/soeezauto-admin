@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Switch } from '@material-ui/core';
@@ -8,14 +8,17 @@ import { actionPutVersion } from 'store/actions';
 
 const VersionToggleActive = (props) => {
     const { versionId, initialActive } = props;
-
-    const [active, setActive] = useState(initialActive);
+    const [active, setActive] = useState(false);
     const [notification, setNotification] = useState({
         status: '',
         title: '',
         message: '',
         errors: {},
     });
+
+    useEffect(() => {
+        setActive(initialActive);
+    }, [initialActive]);
 
     const handleToggleActive = () => {
         setNotification({
@@ -36,7 +39,7 @@ const VersionToggleActive = (props) => {
         if (event.target.id === 'confirmed') {
             props.actionPutVersion({
                 id: versionId,
-                isActive: !active,
+                isActive: !initialActive,
             });
             setActive((prevState) => !prevState);
         }

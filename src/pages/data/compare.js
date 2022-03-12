@@ -7,6 +7,7 @@ import PdfParse from 'pdf-parse';
 import fs from 'fs';
 import ReactDiffViewer from 'react-diff-viewer';
 import NotifierDialog from 'components/std/notifierDialog';
+import NotifierInline from 'components/std/notifierInline';
 import Breadcrumb from 'components/std/breadcrumb';
 
 const useStyles = makeStyles({
@@ -92,6 +93,7 @@ const useStyles = makeStyles({
 
 const Compare = (props) => {
     const { result, brandName, baseDate, currentDate } = props;
+
     const classes = useStyles();
     const [visibleModelPdf, setVisibleModelPdf] = useState(null);
     const [notification, setNotification] = useState({
@@ -116,8 +118,8 @@ const Compare = (props) => {
             errors: {},
         });
     };
-    if (result === 'error') {
-        return <p>{result}</p>;
+    if (typeof result === 'string') {
+        return <NotifierInline severity="error" message={result} />;
     }
 
     return (
@@ -270,6 +272,7 @@ const queryAxios = (baseDate, currentDate, brandName) => {
 };
 
 async function getPdf(path) {
+    // deepcode ignore PT: <please specify a reason of ignoring this>
     const file = fs.readFileSync(path);
     const val = await PdfParse(file)
         .then((resp) => {
@@ -284,13 +287,14 @@ async function getPdf(path) {
 export async function getServerSideProps({ query }) {
     const { brandName, baseDate, currentDate } = query;
     const data = await queryAxios(baseDate, currentDate, brandName);
+
     let result = 'error';
-    if (data.status !== 200 || data.data.result !== 'ok') {
-        result = 'error';
+    if (data.data.result !== 'ok' || data.status !== 200) {
+        result = data.data.result;
     } else {
         result = data.data.response;
     }
-    if (result !== 'error') {
+    if (typeof result !== 'string') {
         for (let index = 0; index < result.models.length; index++) {
             if (
                 result.models[index]?.basePath?.includes('pdf') ||

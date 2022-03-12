@@ -81,6 +81,19 @@ const SpecCreate = (props) => {
     }, []);
 
     useEffect(() => {
+        if (!dataPostSpec) {
+            const now = new Date();
+            change('year', `${now.getFullYear()}`);
+            change(
+                'month',
+                now.getMonth() + 1 > 9
+                    ? `${now.getMonth() + 1}`
+                    : `0${now.getMonth() + 1}`,
+            );
+        }
+    }, [dataPostSpec]);
+
+    useEffect(() => {
         if (dataPostSpec) {
             let message = `Specs created: ${dataPostSpec.countCreatedSpecs}`;
             if (dataPostSpec.countFiles !== dataPostSpec.countCreatedSpecs) {

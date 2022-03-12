@@ -224,7 +224,11 @@ const queryQl = `query getPrices {
 }
 `;
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+    context.res.setHeader(
+        'Cache-Control',
+        'public, s-maxage=10, stale-while-revalidate=300',
+    );
     const data = await apiQl(queryQl, null, false);
     return {
         props: {

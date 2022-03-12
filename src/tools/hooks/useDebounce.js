@@ -14,6 +14,8 @@ export default function useDebounce(callback, delay) {
             clearTimeout(latestTimeout.current);
         }
 
-        latestTimeout.current = setTimeout(() => { latestCallback.current(); }, delay);
+        latestTimeout.current = setTimeout(() => {
+            latestCallback.current();
+        }, delay);
     };
 }

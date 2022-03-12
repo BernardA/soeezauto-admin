@@ -61,7 +61,6 @@ const NotifierDialog = (props) => {
 
     const showErrors = () => {
         const errors = notification.errors;
-        console.log('errors', errors);
         if (errors && errors.length > 0) {
             const output = errors.map((error) => {
                 const key = Object.keys(error)[0];

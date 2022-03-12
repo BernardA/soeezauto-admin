@@ -1,8 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-unused-expressions */
-import {
-    useRef, useLayoutEffect, useState, useCallback,
-} from 'react';
+import { useRef, useLayoutEffect, useState, useCallback } from 'react';
 import ResizeObserver from 'resize-observer-polyfill';
 
 // source https://tobbelindstrom.com/blog/resize-observer-hook/
